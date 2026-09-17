@@ -16,6 +16,307 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    
+    <style>
+        .search-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .search-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+        
+        .search-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .search-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .filters-sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .filters-sidebar h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-group:last-of-type {
+            margin-bottom: 0;
+        }
+        
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+            background: white;
+        }
+        
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .filter-actions {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--border-color);
+        }
+        
+        .results-section {
+            flex: 1;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .results-count {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .results-count span {
+            color: var(--primary-color);
+        }
+        
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .sort-options label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        .sort-options select {
+            padding: 0.5rem 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            background: white;
+        }
+        
+        .teachers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .teacher-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .teacher-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+        
+        .teacher-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .teacher-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 3px solid var(--border-color);
+        }
+        
+        .teacher-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .teacher-info {
+            flex: 1;
+        }
+        
+        .teacher-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .teacher-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stars {
+            color: #FFC107;
+        }
+        
+        .rating-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .review-count {
+            color: var(--text-secondary);
+        }
+        
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .teacher-bio {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .teacher-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+        }
+        
+        .teacher-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .teacher-detail i {
+            color: var(--primary-color);
+            width: 16px;
+        }
+        
+        .teacher-subjects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subject-tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(26, 35, 126, 0.1);
+            color: var(--primary-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1024px) {
+            .search-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-sidebar {
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .teachers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -49,21 +350,23 @@
         </div>
     </nav>
 
+    <!-- Search Hero -->
+    <section class="search-hero">
+        <div class="container">
+            <h1>Find a Teacher</h1>
+            <p>Browse verified teachers for your child's learning needs</p>
+        </div>
+    </section>
+
     <!-- Search Content -->
     <div class="dashboard-container">
         <div class="container">
-            <div class="dashboard-header">
-                <div class="welcome-message">
-                    <h2>Find a Teacher</h2>
-                    <p>Browse verified teachers for your child's learning needs</p>
-                </div>
-            </div>
-
-            <!-- Search Filters -->
-            <div class="dashboard-section">
-                <h3><i class="fas fa-filter"></i> Filter Teachers</h3>
-                <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                    <div class="form-group">
+            <div class="search-container">
+                <!-- Filters Sidebar -->
+                <aside class="filters-sidebar">
+                    <h3><i class="fas fa-filter"></i> Filter Teachers</h3>
+                    
+                    <div class="filter-group">
                         <label for="filterSubject">Subject</label>
                         <select id="filterSubject" onchange="applyFilters()">
                             <option value="">All Subjects</option>
@@ -77,7 +380,7 @@
                         </select>
                     </div>
                     
-                    <div class="form-group">
+                    <div class="filter-group">
                         <label for="filterCurriculum">Curriculum</label>
                         <select id="filterCurriculum" onchange="applyFilters()">
                             <option value="">All Curricula</option>
@@ -88,7 +391,7 @@
                         </select>
                     </div>
                     
-                    <div class="form-group">
+                    <div class="filter-group">
                         <label for="filterLevel">School Level</label>
                         <select id="filterLevel" onchange="applyFilters()">
                             <option value="">All Levels</option>
@@ -99,7 +402,7 @@
                         </select>
                     </div>
                     
-                    <div class="form-group">
+                    <div class="filter-group">
                         <label for="filterCity">City</label>
                         <select id="filterCity" onchange="applyFilters()">
                             <option value="">All Cities</option>
@@ -110,12 +413,12 @@
                         </select>
                     </div>
                     
-                    <div class="form-group">
+                    <div class="filter-group">
                         <label for="filterMaxRate">Max Hourly Rate (GHS)</label>
                         <input type="number" id="filterMaxRate" min="10" step="10" placeholder="e.g., 100" onchange="applyFilters()">
                     </div>
                     
-                    <div class="form-group">
+                    <div class="filter-group">
                         <label for="filterMinRating">Min Rating</label>
                         <select id="filterMinRating" onchange="applyFilters()">
                             <option value="">Any Rating</option>
@@ -125,23 +428,39 @@
                             <option value="3.0">3.0+ Stars</option>
                         </select>
                     </div>
-                </div>
-                
-                <button class="btn btn-outline" onclick="resetFilters()" style="margin-top: 1rem;">
-                    <i class="fas fa-times"></i> Reset Filters
-                </button>
-            </div>
+                    
+                    <div class="filter-actions">
+                        <button class="btn btn-outline" onclick="resetFilters()" style="width: 100%;">
+                            <i class="fas fa-times"></i> Reset Filters
+                        </button>
+                    </div>
+                </aside>
 
-            <!-- Results Count -->
-            <div style="margin-bottom: 1rem; color: var(--text-secondary);">
-                <span id="resultsCount">Loading teachers...</span>
-            </div>
+                <!-- Results Section -->
+                <div class="results-section">
+                    <!-- Results Header -->
+                    <div class="results-header">
+                        <div class="results-count">
+                            <span id="resultsCount">Loading teachers...</span>
+                        </div>
+                        <div class="sort-options">
+                            <label for="sortBy">Sort by:</label>
+                            <select id="sortBy" onchange="applyFilters()">
+                                <option value="rating">Highest Rated</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="experience">Most Experienced</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <!-- Teachers Grid -->
-            <div class="teachers-grid" id="teachersGrid">
-                <div class="loading-state">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>Loading teachers...</p>
+                    <!-- Teachers Grid -->
+                    <div class="teachers-grid" id="teachersGrid">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading teachers...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -343,9 +662,11 @@
             const city = document.getElementById('filterCity').value;
             const maxRate = document.getElementById('filterMaxRate').value;
             const minRating = document.getElementById('filterMinRating').value;
+            const sortBy = document.getElementById('sortBy').value;
             
-            let filtered = allTeachers;
+            let filtered = [...allTeachers];
             
+            // Apply filters
             if (subject) {
                 filtered = filtered.filter(t => t.subjects && t.subjects.includes(subject));
             }
@@ -370,6 +691,22 @@
                 filtered = filtered.filter(t => (t.rating || 0) >= parseFloat(minRating));
             }
             
+            // Apply sorting
+            switch(sortBy) {
+                case 'rating':
+                    filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                    break;
+                case 'price-low':
+                    filtered.sort((a, b) => a.hourlyRate - b.hourlyRate);
+                    break;
+                case 'price-high':
+                    filtered.sort((a, b) => b.hourlyRate - a.hourlyRate);
+                    break;
+                case 'experience':
+                    filtered.sort((a, b) => (b.experienceYears || 0) - (a.experienceYears || 0));
+                    break;
+            }
+            
             renderTeachers(filtered);
         }
         
@@ -388,14 +725,14 @@
             const container = document.getElementById('teachersGrid');
             const countEl = document.getElementById('resultsCount');
             
-            countEl.textContent = `${teachers.length} teacher${teachers.length !== 1 ? 's' : ''} found`;
+            countEl.innerHTML = `<span>${teachers.length}</span> teacher${teachers.length !== 1 ? 's' : ''} found`;
             
             if (teachers.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
-                        <i class="fas fa-search"></i>
-                        <p>No teachers found matching your criteria</p>
-                        <p>Try adjusting your filters</p>
+                        <i class="fas fa-search" style="font-size: 3rem; color: var(--text-light); margin-bottom: 1rem;"></i>
+                        <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">No teachers found</h3>
+                        <p style="color: var(--text-secondary);">Try adjusting your filters to see more results</p>
                     </div>
                 `;
                 return;
@@ -421,6 +758,9 @@
                                     <span class="rating-value">${rating.toFixed(1)}</span>
                                     <span class="review-count">(${teacher.totalReviews || 0} reviews)</span>
                                 </div>
+                                <span class="verified-badge">
+                                    <i class="fas fa-check-circle"></i> Verified
+                                </span>
                             </div>
                         </div>
                         
@@ -433,7 +773,7 @@
                             </div>
                             <div class="teacher-detail">
                                 <i class="fas fa-briefcase"></i>
-                                <span>${teacher.experienceYears || 0} years experience</span>
+                                <span>${teacher.experienceYears || 0} years exp</span>
                             </div>
                             <div class="teacher-detail">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -441,7 +781,7 @@
                             </div>
                             <div class="teacher-detail">
                                 <i class="fas fa-money-bill-wave"></i>
-                                <span><strong>${formatCurrency(teacher.hourlyRate)}</strong> / hour</span>
+                                <span><strong>${formatCurrency(teacher.hourlyRate)}</strong>/hr</span>
                             </div>
                         </div>
                         
