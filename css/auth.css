@@ -477,10 +477,6 @@
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    
-    .auth-benefits {
-        order: -1;
-    }
 }
 
 @media (max-width: 768px) {
