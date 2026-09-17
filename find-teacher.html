@@ -36,6 +36,48 @@
             opacity: 0.95;
         }
         
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            background: white;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+        
+        .category-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .category-tab:hover {
+            background: var(--bg-primary);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .category-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .category-tab i {
+            font-size: 1.1rem;
+        }
+        
         .search-container {
             display: grid;
             grid-template-columns: 300px 1fr;
@@ -358,6 +400,24 @@
         </div>
     </section>
 
+    <!-- Category Tabs -->
+    <div class="container" style="margin-bottom: 2rem;">
+        <div class="category-tabs">
+            <button class="category-tab active" data-category="all" onclick="switchCategory('all')">
+                <i class="fas fa-th"></i> All Teachers
+            </button>
+            <button class="category-tab" data-category="academic" onclick="switchCategory('academic')">
+                <i class="fas fa-book"></i> Academic Teachers
+            </button>
+            <button class="category-tab" data-category="language" onclick="switchCategory('language')">
+                <i class="fas fa-globe-africa"></i> Language Teachers
+            </button>
+            <button class="category-tab" data-category="extracurricular" onclick="switchCategory('extracurricular')">
+                <i class="fas fa-palette"></i> Extracurricular Teachers
+            </button>
+        </div>
+    </div>
+
     <!-- Search Content -->
     <div class="dashboard-container">
         <div class="container">
@@ -612,6 +672,7 @@
     
     <script>
         let allTeachers = [];
+        let currentCategory = 'all';
         
         document.addEventListener('DOMContentLoaded', function() {
             // Check if user is logged in
@@ -623,6 +684,21 @@
             
             loadTeachers();
         });
+        
+        function switchCategory(category) {
+            currentCategory = category;
+            
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                if (tab.dataset.category === category) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            applyFilters();
+        }
         
         async function loadTeachers() {
             try {
@@ -678,7 +754,8 @@
                     schoolLevels: ['Primary', 'JHS', 'SHS'],
                     location: { city: 'Accra', area: 'East Legon' },
                     profilePhoto: null,
-                    verificationStatus: 'verified'
+                    verificationStatus: 'verified',
+                    category: 'academic'
                 },
                 {
                     id: 'demo2',
@@ -694,7 +771,8 @@
                     schoolLevels: ['JHS', 'SHS'],
                     location: { city: 'Accra', area: 'Cantonments' },
                     profilePhoto: null,
-                    verificationStatus: 'verified'
+                    verificationStatus: 'verified',
+                    category: 'academic'
                 },
                 {
                     id: 'demo3',
@@ -710,7 +788,8 @@
                     schoolLevels: ['SHS', 'JHS'],
                     location: { city: 'Kumasi', area: 'Adum' },
                     profilePhoto: null,
-                    verificationStatus: 'verified'
+                    verificationStatus: 'verified',
+                    category: 'academic'
                 },
                 {
                     id: 'demo4',
@@ -726,7 +805,8 @@
                     schoolLevels: ['JHS', 'SHS'],
                     location: { city: 'Accra', area: 'Airport Residential' },
                     profilePhoto: null,
-                    verificationStatus: 'verified'
+                    verificationStatus: 'verified',
+                    category: 'academic'
                 },
                 {
                     id: 'demo5',
@@ -742,7 +822,8 @@
                     schoolLevels: ['Nursery', 'Primary'],
                     location: { city: 'Tema', area: 'Community 25' },
                     profilePhoto: null,
-                    verificationStatus: 'verified'
+                    verificationStatus: 'verified',
+                    category: 'academic'
                 },
                 {
                     id: 'demo6',
@@ -758,11 +839,122 @@
                     schoolLevels: ['SHS', 'JHS'],
                     location: { city: 'Accra', area: 'Spintex' },
                     profilePhoto: null,
-                    verificationStatus: 'verified'
+                    verificationStatus: 'verified',
+                    category: 'academic'
+                },
+                {
+                    id: 'demo7',
+                    user: { firstName: 'Esi', lastName: 'Mensah' },
+                    bio: 'French language teacher with international experience. Making language learning fun and practical for all ages.',
+                    qualification: 'B.A French, University of Ghana',
+                    experienceYears: 9,
+                    hourlyRate: 70,
+                    rating: 4.8,
+                    totalReviews: 41,
+                    subjects: ['French', 'English (ESL)'],
+                    curricula: ['GES', 'British', 'IB'],
+                    schoolLevels: ['Primary', 'JHS', 'SHS'],
+                    location: { city: 'Accra', area: 'Labone' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified',
+                    category: 'language'
+                },
+                {
+                    id: 'demo8',
+                    user: { firstName: 'Kwesi', lastName: 'Amissah' },
+                    bio: 'Spanish language specialist with certification from Instituto Cervantes. Passionate about Hispanic culture and language.',
+                    qualification: 'B.A Spanish, University of Cape Coast',
+                    experienceYears: 6,
+                    hourlyRate: 75,
+                    rating: 4.7,
+                    totalReviews: 28,
+                    subjects: ['Spanish', 'English (ESL)'],
+                    curricula: ['GES', 'British', 'Cambridge'],
+                    schoolLevels: ['JHS', 'SHS'],
+                    location: { city: 'Accra', area: 'Osu' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified',
+                    category: 'language'
+                },
+                {
+                    id: 'demo9',
+                    user: { firstName: 'Akosua', lastName: 'Frimpong' },
+                    bio: 'Music teacher specializing in piano and music theory. Helping students discover their musical talents.',
+                    qualification: 'B.A Music, University of Education',
+                    experienceYears: 8,
+                    hourlyRate: 65,
+                    rating: 4.9,
+                    totalReviews: 36,
+                    subjects: ['Piano', 'Music Theory', 'Vocal Training'],
+                    curricula: ['GES', 'ABRSM'],
+                    schoolLevels: ['Nursery', 'Primary', 'JHS', 'SHS'],
+                    location: { city: 'Accra', area: 'Roman Ridge' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified',
+                    category: 'extracurricular'
+                },
+                {
+                    id: 'demo10',
+                    user: { firstName: 'Kwabena', lastName: 'Owusu' },
+                    bio: 'Art and design teacher with gallery experience. Nurturing creativity and artistic expression in young minds.',
+                    qualification: 'B.F.A Fine Arts, KNUST',
+                    experienceYears: 7,
+                    hourlyRate: 60,
+                    rating: 4.8,
+                    totalReviews: 31,
+                    subjects: ['Drawing', 'Painting', 'Art History'],
+                    curricula: ['GES', 'Portfolio Preparation'],
+                    schoolLevels: ['Primary', 'JHS', 'SHS'],
+                    location: { city: 'Kumasi', area: 'Ahodwo' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified',
+                    category: 'extracurricular'
+                },
+                {
+                    id: 'demo11',
+                    user: { firstName: 'Afia', lastName: 'Asante' },
+                    bio: 'Sports coach and fitness trainer. Promoting physical health and teamwork through sports education.',
+                    qualification: 'B.Sc Sports Science, University of Ghana',
+                    experienceYears: 5,
+                    hourlyRate: 55,
+                    rating: 4.6,
+                    totalReviews: 24,
+                    subjects: ['Football', 'Athletics', 'Fitness Training'],
+                    curricula: ['GES', 'Sports Academy'],
+                    schoolLevels: ['Primary', 'JHS', 'SHS'],
+                    location: { city: 'Tema', area: 'Community 10' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified',
+                    category: 'extracurricular'
+                },
+                {
+                    id: 'demo12',
+                    user: { firstName: 'Nana', lastName: 'Agyemang' },
+                    bio: 'Coding and robotics instructor. Making technology accessible and exciting for the next generation of innovators.',
+                    qualification: 'B.Sc Computer Engineering, Ashesi University',
+                    experienceYears: 4,
+                    hourlyRate: 80,
+                    rating: 4.7,
+                    totalReviews: 19,
+                    subjects: ['Robotics', 'Coding', 'STEM'],
+                    curricula: ['STEM Academy', 'Project-Based Learning'],
+                    schoolLevels: ['Primary', 'JHS'],
+                    location: { city: 'Accra', area: 'Dzorwulu' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified',
+                    category: 'extracurricular'
                 }
             ];
             
-            applyFilters();
+            // Check URL parameter for category
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('type');
+            
+            if (categoryParam && ['academic', 'language', 'extracurricular'].includes(categoryParam)) {
+                switchCategory(categoryParam);
+            } else {
+                applyFilters();
+            }
         }
         
         function applyFilters() {
@@ -776,7 +968,12 @@
             
             let filtered = [...allTeachers];
             
-            // Apply filters
+            // Apply category filter
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(t => t.category === currentCategory);
+            }
+            
+            // Apply other filters
             if (subject) {
                 filtered = filtered.filter(t => t.subjects && t.subjects.includes(subject));
             }
