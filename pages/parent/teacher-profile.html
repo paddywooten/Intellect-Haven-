@@ -174,51 +174,51 @@
         });
         
         async function loadTeacherProfile(teacherId) {
+            // Check if Firebase is configured and collections exist
+            let useFirebase = false;
+            
             try {
-                // Check if Firebase is configured
-                if (!firebaseDB || !firebaseDB.app) {
-                    loadDemoProfile(teacherId);
-                    return;
+                if (firebaseDB && firebaseDB.app) {
+                    // Try to fetch from Firebase
+                    const teacherDoc = await firebaseDB.collection('teachers').doc(teacherId).get();
+                    
+                    if (teacherDoc.exists) {
+                        useFirebase = true;
+                        currentTeacher = { id: teacherDoc.id, ...teacherDoc.data() };
+                        
+                        // Get user info
+                        const userDoc = await firebaseDB.collection('users').doc(currentTeacher.userId).get();
+                        currentTeacher.user = userDoc.data();
+                        
+                        // Get reviews
+                        const reviewsSnapshot = await firebaseDB.collection('reviews')
+                            .where('teacherId', '==', teacherId)
+                            .orderBy('createdAt', 'desc')
+                            .limit(5)
+                            .get();
+                        
+                        const reviews = [];
+                        for (const doc of reviewsSnapshot.docs) {
+                            const review = { id: doc.id, ...doc.data() };
+                            const parentDoc = await firebaseDB.collection('users').doc(review.parentId).get();
+                            review.parent = parentDoc.data();
+                            reviews.push(review);
+                        }
+                        
+                        currentTeacher.reviews = reviews;
+                    }
                 }
-                
-                const teacherDoc = await firebaseDB.collection('teachers').doc(teacherId).get();
-                
-                if (!teacherDoc.exists) {
-                    // Try demo data
-                    loadDemoProfile(teacherId);
-                    return;
-                }
-                
-                currentTeacher = { id: teacherDoc.id, ...teacherDoc.data() };
-                
-                // Get user info
-                const userDoc = await firebaseDB.collection('users').doc(currentTeacher.userId).get();
-                currentTeacher.user = userDoc.data();
-                
-                // Get reviews
-                const reviewsSnapshot = await firebaseDB.collection('reviews')
-                    .where('teacherId', '==', teacherId)
-                    .orderBy('createdAt', 'desc')
-                    .limit(5)
-                    .get();
-                
-                const reviews = [];
-                for (const doc of reviewsSnapshot.docs) {
-                    const review = { id: doc.id, ...doc.data() };
-                    const parentDoc = await firebaseDB.collection('users').doc(review.parentId).get();
-                    review.parent = parentDoc.data();
-                    reviews.push(review);
-                }
-                
-                currentTeacher.reviews = reviews;
-                
-                renderProfile();
-                
             } catch (error) {
-                console.error('Error loading profile:', error);
-                // Try demo data as fallback
-                loadDemoProfile(teacherId);
+                console.log('Firebase not available or teacher not found, using demo data');
             }
+            
+            // If Firebase didn't work, use demo data
+            if (!useFirebase) {
+                loadDemoProfile(teacherId);
+                return;
+            }
+            
+            renderProfile();
         }
         
         function loadDemoProfile(teacherId) {
