@@ -319,6 +319,44 @@
         </div>
     </section>
 
+    <!-- Floating Chat Widget -->
+    <div class="chat-widget">
+        <!-- Chat Button -->
+        <button class="chat-button" id="chatButton" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+            <span class="chat-badge" id="chatBadge">1</span>
+        </button>
+        
+        <!-- Chat Window -->
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4>Intellect Haven Assistant</h4>
+                        <span class="chat-status">Online</span>
+                    </div>
+                </div>
+                <button class="chat-close" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be inserted here -->
+            </div>
+            
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+                <button class="chat-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -383,5 +421,6 @@
     
     <!-- Custom JavaScript -->
     <script src="js/app.js"></script>
+    <script src="js/chat-widget.js"></script>
 </body>
 </html>
