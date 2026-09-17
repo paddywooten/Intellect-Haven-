@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    
+    <style>
+        .profile-photo-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+        
+        .profile-photo-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            flex-shrink: 0;
+        }
+        
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .profile-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            border: 4px solid white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .profile-photo-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: 3px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .profile-photo-upload-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+        
+        .profile-photo-upload-btn input {
+            display: none;
+        }
+        
+        .profile-photo-info {
+            flex: 1;
+        }
+        
+        .profile-photo-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .profile-photo-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-progress {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .upload-progress.active {
+            display: block;
+        }
+        
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+            width: 0%;
+        }
+        
+        .verification-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .verification-status-badge.pending {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+        
+        .verification-status-badge.verified {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .verification-status-badge.rejected {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="profile.html" class="nav-link active">Profile</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="availability.html" class="nav-link">Availability</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Profile Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>My Profile</h2>
+                    <p>Manage your profile and verification status</p>
+                </div>
+            </div>
+
+            <!-- Verification Status -->
+            <div id="verificationStatusContainer"></div>
+
+            <!-- Profile Photo Section -->
+            <div class="profile-photo-section">
+                <div class="profile-photo-container">
+                    <div id="profilePhotoDisplay">
+                        <div class="profile-photo-placeholder" id="profilePhotoPlaceholder">
+                            <span id="profileInitials">T</span>
+                        </div>
+                    </div>
+                    <label class="profile-photo-upload-btn" for="profilePhotoInput">
+                        <i class="fas fa-camera"></i>
+                        <input type="file" id="profilePhotoInput" accept="image/*" onchange="handleProfilePhotoUpload(event)">
+                    </label>
+                </div>
+                <div class="profile-photo-info">
+                    <h3>Profile Photo</h3>
+                    <p>Upload a professional photo to build trust with parents. Recommended: 800x800px, JPG or PNG, max 5MB.</p>
+                    <button class="btn btn-outline btn-small" id="removePhotoBtn" onclick="removeProfilePhoto()" style="display: none;">
+                        <i class="fas fa-trash"></i> Remove Photo
+                    </button>
+                    <div class="upload-progress" id="uploadProgress">
+                        <div class="upload-progress-bar" id="uploadProgressBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Form -->
+            <div class="dashboard-section">
+                <form id="profileForm" class="dashboard-form">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Personal Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Professional Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-graduation-cap"></i> Professional Information</h3>
+                        <div class="form-group">
+                            <label for="bio">Bio <span style="color: var(--error-color);">*</span></label>
+                            <textarea id="bio" rows="5" required placeholder="Tell parents about yourself, your teaching style, and experience..."></textarea>
+                            <small>Minimum 50 characters. Be specific about your expertise.</small>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="qualification">Qualification <span style="color: var(--error-color);">*</span></label>
+                                <input type="text" id="qualification" required placeholder="e.g., B.Ed Mathematics, University of Ghana">
+                            </div>
+                            <div class="form-group">
+                                <label for="experienceYears">Years of Experience</label>
+                                <input type="number" id="experienceYears" min="0" max="50" placeholder="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="hourlyRate">Hourly Rate (GHS) <span style="color: var(--error-color);">*</span></label>
+                                <input type="number" id="hourlyRate" min="10" step="5" required placeholder="50">
+                                <small>Minimum 10 GHS per hour</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subjects -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-book"></i> Subjects You Teach <span style="color: var(--error-color);">*</span></h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subjects" value="Mathematics">
+                                    <span>Mathematics</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subjects" value="English Language">
+                                    <span>English Language</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subjects" value="Science">
+                                    <span>Science</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subjects" value="Physics">
+                                    <span>Physics</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subjects" value="Chemistry">
+                                    <span>Chemistry</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subjects" value="Biology">
+                                    <span>Biology</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Curricula -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-school"></i> Curricula <span style="color: var(--error-color);">*</span></h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="curricula" value="GES">
+                                    <span>GES (Ghana Education Service)</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="curricula" value="British">
+                                    <span>British Curriculum</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="curricula" value="Cambridge">
+                                    <span>Cambridge Curriculum</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="curricula" value="IB">
+                                    <span>International Baccalaureate (IB)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- School Levels -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-users"></i> School Levels <span style="color: var(--error-color);">*</span></h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="schoolLevels" value="Nursery">
+                                    <span>Nursery / Kindergarten</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="schoolLevels" value="Primary">
+                                    <span>Primary School</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="schoolLevels" value="JHS">
+                                    <span>Junior High School (JHS)</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="schoolLevels" value="SHS">
+                                    <span>Senior High School (SHS)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="city">City <span style="color: var(--error-color);">*</span></label>
+                                <select id="city" required>
+                                    <option value="">Select city</option>
+                                    <option value="Accra">Accra</option>
+                                    <option value="Kumasi">Kumasi</option>
+                                    <option value="Tamale">Tamale</option>
+                                    <option value="Takoradi">Takoradi</option>
+                                    <option value="Cape Coast">Cape Coast</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="area">Area / Neighborhood</label>
+                                <input type="text" id="area" placeholder="e.g., East Legon, Adabraka">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large" id="saveProfileBtn">
+                            <i class="fas fa-save"></i> Save Profile
+                        </button>
+                        <a href="dashboard.html" class="btn btn-outline btn-large">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/teacher.js"></script>
+    <script src="../../js/image-upload.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!requireUserType(['teacher'])) return;
+            
+            loadProfile();
+            initProfileForm();
+        });
+        
+        async function loadProfile() {
+            try {
+                const teacherDoc = await firebaseDB.collection('teachers').doc(window.currentUser.uid).get();
+                
+                if (!teacherDoc.exists) {
+                    showFlashMessage('Profile not found', 'error');
+                    return;
+                }
+                
+                const teacher = teacherDoc.data();
+                window.teacherData = teacher;
+                
+                // Update user info
+                document.getElementById('firstName').value = window.userData.firstName;
+                document.getElementById('lastName').value = window.userData.lastName;
+                document.getElementById('email').value = window.userData.email;
+                document.getElementById('phone').value = window.userData.phone || '';
+                document.getElementById('userName').textContent = window.userData.firstName;
+                
+                // Set initials
+                const initials = (window.userData.firstName[0] + window.userData.lastName[0]).toUpperCase();
+                document.getElementById('profileInitials').textContent = initials;
+                
+                // Load profile photo if exists
+                if (teacher.profilePhoto) {
+                    displayProfilePhoto(teacher.profilePhoto);
+                }
+                
+                // Load profile data
+                document.getElementById('bio').value = teacher.bio || '';
+                document.getElementById('qualification').value = teacher.qualification || '';
+                document.getElementById('experienceYears').value = teacher.experienceYears || 0;
+                document.getElementById('hourlyRate').value = teacher.hourlyRate || 50;
+                document.getElementById('city').value = teacher.location?.city || '';
+                document.getElementById('area').value = teacher.location?.area || '';
+                
+                // Check subjects
+                if (teacher.subjects) {
+                    teacher.subjects.forEach(subject => {
+                        const checkbox = document.querySelector(`input[name="subjects"][value="${subject}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                
+                // Check curricula
+                if (teacher.curricula) {
+                    teacher.curricula.forEach(curriculum => {
+                        const checkbox = document.querySelector(`input[name="curricula"][value="${curriculum}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                
+                // Check school levels
+                if (teacher.schoolLevels) {
+                    teacher.schoolLevels.forEach(level => {
+                        const checkbox = document.querySelector(`input[name="schoolLevels"][value="${level}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                
+                // Show verification status
+                showVerificationStatus(teacher.verificationStatus);
+                
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showFlashMessage('Error loading profile', 'error');
+            }
+        }
+        
+        function displayProfilePhoto(url) {
+            const container = document.getElementById('profilePhotoDisplay');
+            container.innerHTML = `<img src="${url}" alt="Profile Photo" class="profile-photo">`;
+            document.getElementById('removePhotoBtn').style.display = 'inline-flex';
+        }
+        
+        function showVerificationStatus(status) {
+            const container = document.getElementById('verificationStatusContainer');
+            
+            if (status === 'pending') {
+                container.innerHTML = `
+                    <div class="verification-status-badge pending">
+                        <i class="fas fa-clock"></i> Verification Pending - Your documents are under review
+                    </div>
+                `;
+            } else if (status === 'verified') {
+                container.innerHTML = `
+                    <div class="verification-status-badge verified">
+                        <i class="fas fa-check-circle"></i> Verified Teacher - You can receive bookings
+                    </div>
+                `;
+            } else if (status === 'rejected') {
+                container.innerHTML = `
+                    <div class="verification-status-badge rejected">
+                        <i class="fas fa-times-circle"></i> Verification Rejected - Please resubmit documents
+                    </div>
+                `;
+            }
+        }
+        
+        async function handleProfilePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file
+            const validation = ImageUpload.validateImageFile(file);
+            if (!validation.valid) {
+                showFlashMessage(validation.error, 'error');
+                return;
+            }
+            
+            // Show progress
+            const progressContainer = document.getElementById('uploadProgress');
+            const progressBar = document.getElementById('uploadProgressBar');
+            progressContainer.classList.add('active');
+            
+            try {
+                // Upload with progress
+                const result = await ImageUpload.uploadTeacherProfilePhoto(
+                    file,
+                    window.currentUser.uid,
+                    (progress) => {
+                        progressBar.style.width = progress + '%';
+                    }
+                );
+                
+                if (result.success) {
+                    // Update Firestore
+                    await firebaseDB.collection('teachers').doc(window.currentUser.uid).update({
+                        profilePhoto: result.url
+                    });
+                    
+                    // Display photo
+                    displayProfilePhoto(result.url);
+                    
+                    showFlashMessage('Profile photo uploaded successfully!', 'success');
+                } else {
+                    showFlashMessage(result.error || 'Upload failed', 'error');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                showFlashMessage('Upload failed: ' + error.message, 'error');
+            } finally {
+                // Hide progress
+                setTimeout(() => {
+                    progressContainer.classList.remove('active');
+                    progressBar.style.width = '0%';
+                }, 1000);
+            }
+            
+            // Reset input
+            event.target.value = '';
+        }
+        
+        async function removeProfilePhoto() {
+            if (!confirm('Are you sure you want to remove your profile photo?')) {
+                return;
+            }
+            
+            try {
+                // Get current photo URL
+                const teacherDoc = await firebaseDB.collection('teachers').doc(window.currentUser.uid).get();
+                const currentPhoto = teacherDoc.data().profilePhoto;
+                
+                if (currentPhoto) {
+                    // Delete from storage
+                    await ImageUpload.deleteImage(currentPhoto);
+                }
+                
+                // Update Firestore
+                await firebaseDB.collection('teachers').doc(window.currentUser.uid).update({
+                    profilePhoto: null
+                });
+                
+                // Reset display
+                const initials = (window.userData.firstName[0] + window.userData.lastName[0]).toUpperCase();
+                document.getElementById('profilePhotoDisplay').innerHTML = `
+                    <div class="profile-photo-placeholder">
+                        <span>${initials}</span>
+                    </div>
+                `;
+                document.getElementById('removePhotoBtn').style.display = 'none';
+                
+                showFlashMessage('Profile photo removed', 'success');
+                
+            } catch (error) {
+                console.error('Error removing photo:', error);
+                showFlashMessage('Error removing photo', 'error');
+            }
+        }
+        
+        function initProfileForm() {
+            const form = document.getElementById('profileForm');
+            if (form) {
+                form.addEventListener('submit', handleProfileUpdate);
+            }
+        }
+        
+        async function handleProfileUpdate(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('saveProfileBtn');
+            const resetLoading = showLoading(submitBtn);
+            
+            try {
+                // Collect form data
+                const bio = document.getElementById('bio').value.trim();
+                const qualification = document.getElementById('qualification').value.trim();
+                const experienceYears = parseInt(document.getElementById('experienceYears').value) || 0;
+                const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 50;
+                const city = document.getElementById('city').value;
+                const area = document.getElementById('area').value.trim();
+                
+                // Collect checkboxes
+                const subjects = Array.from(document.querySelectorAll('input[name="subjects"]:checked'))
+                    .map(cb => cb.value);
+                
+                const curricula = Array.from(document.querySelectorAll('input[name="curricula"]:checked'))
+                    .map(cb => cb.value);
+                
+                const schoolLevels = Array.from(document.querySelectorAll('input[name="schoolLevels"]:checked'))
+                    .map(cb => cb.value);
+                
+                // Validate
+                if (!bio || bio.length < 50) {
+                    throw new Error('Bio must be at least 50 characters');
+                }
+                
+                if (!qualification) {
+                    throw new Error('Please enter your qualification');
+                }
+                
+                if (subjects.length === 0) {
+                    throw new Error('Please select at least one subject');
+                }
+                
+                if (curricula.length === 0) {
+                    throw new Error('Please select at least one curriculum');
+                }
+                
+                if (schoolLevels.length === 0) {
+                    throw new Error('Please select at least one school level');
+                }
+                
+                if (!city) {
+                    throw new Error('Please select your city');
+                }
+                
+                if (hourlyRate < 10) {
+                    throw new Error('Hourly rate must be at least 10 GHS');
+                }
+                
+                // Update Firestore
+                await firebaseDB.collection('teachers').doc(window.currentUser.uid).update({
+                    bio: bio,
+                    qualification: qualification,
+                    experienceYears: experienceYears,
+                    hourlyRate: hourlyRate,
+                    subjects: subjects,
+                    curricula: curricula,
+                    schoolLevels: schoolLevels,
+                    location: {
+                        city: city,
+                        area: area
+                    },
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showFlashMessage('Profile updated successfully!', 'success');
+                
+                // Reload profile
+                setTimeout(() => {
+                    loadProfile();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showFlashMessage(error.message, 'error');
+            } finally {
+                resetLoading();
+            }
+        }
+    </script>
+</body>
+</html>

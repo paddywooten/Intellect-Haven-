@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Verification - Intellect Haven Admin</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven <span class="admin-badge">Admin</span></h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="verification.html" class="nav-link active">Verification</a>
+                <a href="users.html" class="nav-link">Users</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="reports.html" class="nav-link">Reports</a>
+                <div class="nav-user">
+                    <span id="userName">Admin</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Verification Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>Teacher Verification</h2>
+                    <p>Review and approve teacher verification requests</p>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="quick-stats-row">
+                <div class="quick-stat">
+                    <div class="quick-stat-icon warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <h4 id="pendingCount">0</h4>
+                        <p>Pending Reviews</p>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <h4 id="verifiedCount">0</h4>
+                        <p>Verified Teachers</p>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon" style="background: linear-gradient(135deg, #F44336 0%, #C62828 100%);">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <h4 id="rejectedCount">0</h4>
+                        <p>Rejected</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="admin-filters">
+                <div class="filters-grid">
+                    <div class="form-group">
+                        <label for="filterStatus">Status</label>
+                        <select id="filterStatus" onchange="applyFilters()">
+                            <option value="pending">Pending</option>
+                            <option value="verified">Verified</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterDate">Date Range</label>
+                        <select id="filterDate" onchange="applyFilters()">
+                            <option value="all">All Time</option>
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                    </div>
+                    <div class="form-group search-box">
+                        <label for="searchTeacher">Search</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchTeacher" placeholder="Search by name or email..." oninput="applyFilters()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification List -->
+            <div class="dashboard-section">
+                <div id="verificationList">
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading verification requests...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/admin.js"></script>
+    
+    <script>
+        let allVerifications = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVerificationStats();
+        });
+        
+        async function loadVerificationStats() {
+            // Pending
+            const pendingSnapshot = await firebaseDB.collection('teachers')
+                .where('verificationStatus', '==', 'pending')
+                .get();
+            document.getElementById('pendingCount').textContent = pendingSnapshot.size;
+            
+            // Verified
+            const verifiedSnapshot = await firebaseDB.collection('teachers')
+                .where('verificationStatus', '==', 'verified')
+                .get();
+            document.getElementById('verifiedCount').textContent = verifiedSnapshot.size;
+            
+            // Rejected
+            const rejectedSnapshot = await firebaseDB.collection('teachers')
+                .where('verificationStatus', '==', 'rejected')
+                .get();
+            document.getElementById('rejectedCount').textContent = rejectedSnapshot.size;
+        }
+        
+        async function applyFilters() {
+            const status = document.getElementById('filterStatus').value;
+            const dateRange = document.getElementById('filterDate').value;
+            const search = document.getElementById('searchTeacher').value.toLowerCase();
+            
+            let query = firebaseDB.collection('teachers');
+            
+            if (status !== 'all') {
+                query = query.where('verificationStatus', '==', status);
+            }
+            
+            const snapshot = await query.orderBy('createdAt', 'desc').get();
+            
+            allVerifications = [];
+            
+            for (const doc of snapshot.docs) {
+                const teacher = { id: doc.id, ...doc.data() };
+                const userDoc = await firebaseDB.collection('users').doc(teacher.userId).get();
+                teacher.user = userDoc.data();
+                
+                // Apply date filter
+                if (dateRange !== 'all') {
+                    const days = parseInt(dateRange);
+                    const cutoff = new Date();
+                    cutoff.setDate(cutoff.getDate() - days);
+                    
+                    if (teacher.createdAt.toDate() < cutoff) {
+                        continue;
+                    }
+                }
+                
+                // Apply search filter
+                if (search) {
+                    const fullName = `${teacher.user.firstName} ${teacher.user.lastName}`.toLowerCase();
+                    const email = teacher.user.email.toLowerCase();
+                    
+                    if (!fullName.includes(search) && !email.includes(search)) {
+                        continue;
+                    }
+                }
+                
+                allVerifications.push(teacher);
+            }
+            
+            renderVerifications(allVerifications);
+        }
+        
+        function renderVerifications(verifications) {
+            const container = document.getElementById('verificationList');
+            
+            if (verifications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle"></i>
+                        <p>No verification requests found</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = verifications.map(teacher => {
+                const submittedAt = teacher.createdAt.toDate();
+                const dateStr = submittedAt.toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                const statusClass = teacher.verificationStatus;
+                const statusText = teacher.verificationStatus.charAt(0).toUpperCase() + teacher.verificationStatus.slice(1);
+                
+                return `
+                    <div class="verification-card">
+                        <div class="verification-header">
+                            <div class="verification-info">
+                                <h4>${teacher.user.firstName} ${teacher.user.lastName}</h4>
+                                <div class="verification-meta">
+                                    <span><i class="fas fa-envelope"></i> ${teacher.user.email}</span>
+                                    <span><i class="fas fa-phone"></i> ${teacher.user.phone || 'N/A'}</span>
+                                    <span><i class="fas fa-calendar"></i> ${dateStr}</span>
+                                </div>
+                            </div>
+                            <div class="verification-status ${statusClass}">${statusText}</div>
+                        </div>
+                        
+                        ${teacher.verificationDocuments ? `
+                            <div class="verification-documents">
+                                ${teacher.verificationDocuments.idCard ? `
+                                    <div class="document-item">
+                                        <span class="document-label">ID Card</span>
+                                        <a href="${teacher.verificationDocuments.idCard}" target="_blank" class="document-link">
+                                            <i class="fas fa-file-pdf"></i> View Document
+                                        </a>
+                                    </div>
+                                ` : ''}
+                                
+                                ${teacher.verificationDocuments.qualification ? `
+                                    <div class="document-item">
+                                        <span class="document-label">Qualification</span>
+                                        <a href="${teacher.verificationDocuments.qualification}" target="_blank" class="document-link">
+                                            <i class="fas fa-file-pdf"></i> View Document
+                                        </a>
+                                    </div>
+                                ` : ''}
+                                
+                                ${teacher.verificationDocuments.references ? `
+                                    <div class="document-item">
+                                        <span class="document-label">References</span>
+                                        <a href="${teacher.verificationDocuments.references}" target="_blank" class="document-link">
+                                            <i class="fas fa-file-pdf"></i> View Document
+                                        </a>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        <div style="padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-sm); margin: 1rem 0;">
+                            <strong>Qualification:</strong> ${teacher.qualification || 'Not specified'}<br>
+                            <strong>Experience:</strong> ${teacher.experienceYears || 0} years<br>
+                            <strong>Subjects:</strong> ${teacher.subjects ? teacher.subjects.join(', ') : 'None'}<br>
+                            <strong>Location:</strong> ${teacher.location.city}${teacher.location.area ? ', ' + teacher.location.area : ''}
+                        </div>
+                        
+                        ${teacher.rejectionReason ? `
+                            <div class="verification-notes">
+                                <h5><i class="fas fa-exclamation-triangle"></i> Rejection Reason</h5>
+                                <p>${teacher.rejectionReason}</p>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="verification-actions">
+                            ${teacher.verificationStatus === 'pending' ? `
+                                <button class="btn btn-primary" onclick="approveVerification('${teacher.id}', '${teacher.user.firstName} ${teacher.user.lastName}')">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn btn-outline" onclick="openRejectModal('${teacher.id}', '${teacher.user.firstName} ${teacher.user.lastName}')">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            ` : ''}
+                            <a href="../parent/teacher-profile.html?id=${teacher.id}" class="btn btn-outline" target="_blank">
+                                <i class="fas fa-eye"></i> View Full Profile
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Populate user name
+        if (window.userData) {
+            document.getElementById('userName').textContent = window.userData.firstName || 'Admin';
+        }
+        
+        // Initial load
+        applyFilters();
+    </script>
+</body>
+</html>

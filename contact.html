@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Intellect Haven - Get in touch with our support team">
+    <title>Contact Us - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="find-teacher.html" class="nav-link">Find a Teacher</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="login.html" class="btn btn-outline">Login</a>
+                <a href="register.html" class="btn btn-primary">Sign Up</a>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Contact Section -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>Contact Us</h2>
+                    <p>We're here to help! Get in touch with our team</p>
+                </div>
+            </div>
+
+            <div class="admin-grid">
+                <!-- Contact Form -->
+                <div class="dashboard-section">
+                    <h3><i class="fas fa-envelope"></i> Send us a Message</h3>
+                    <form id="contactForm" class="dashboard-form">
+                        <div class="form-group">
+                            <label for="name">Your Name <span style="color: var(--error-color);">*</span></label>
+                            <input type="text" id="name" required placeholder="John Doe">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address <span style="color: var(--error-color);">*</span></label>
+                            <input type="email" id="email" required placeholder="you@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number (Optional)</label>
+                            <input type="tel" id="phone" placeholder="+233 20 123 4567">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject <span style="color: var(--error-color);">*</span></label>
+                            <select id="subject" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="verification">Teacher Verification</option>
+                                <option value="booking">Booking Issue</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="partnership">Partnership Opportunity</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message <span style="color: var(--error-color);">*</span></label>
+                            <textarea id="message" rows="6" required placeholder="How can we help you?"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div>
+                    <div class="dashboard-section">
+                        <h3><i class="fas fa-info-circle"></i> Contact Information</h3>
+                        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">
+                                    <i class="fas fa-envelope"></i> Email
+                                </h4>
+                                <p style="color: var(--text-secondary);">support@intellecthaven.com</p>
+                                <p style="color: var(--text-secondary);">info@intellecthaven.com</p>
+                            </div>
+                            
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">
+                                    <i class="fas fa-phone"></i> Phone
+                                </h4>
+                                <p style="color: var(--text-secondary);">+233 (0) 30 277 8899</p>
+                                <p style="color: var(--text-secondary);">Mon-Fri: 8:00 AM - 6:00 PM</p>
+                            </div>
+                            
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">
+                                    <i class="fas fa-map-marker-alt"></i> Address
+                                </h4>
+                                <p style="color: var(--text-secondary);">
+                                    Intellect Haven<br>
+                                    15 Independence Avenue<br>
+                                    Ridge, Accra<br>
+                                    Ghana
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">
+                                    <i class="fas fa-clock"></i> Business Hours
+                                </h4>
+                                <p style="color: var(--text-secondary);">Monday - Friday: 8:00 AM - 6:00 PM</p>
+                                <p style="color: var(--text-secondary);">Saturday: 9:00 AM - 2:00 PM</p>
+                                <p style="color: var(--text-secondary);">Sunday: Closed</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-section">
+                        <h3><i class="fas fa-share-alt"></i> Follow Us</h3>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <a href="#" class="btn btn-outline" style="padding: 0.75rem 1rem;">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline" style="padding: 0.75rem 1rem;">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline" style="padding: 0.75rem 1rem;">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline" style="padding: 0.75rem 1rem;">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-section" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white;">
+                        <h3 style="color: white;"><i class="fas fa-question-circle"></i> Quick Help</h3>
+                        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+                            <li style="margin-bottom: 0.75rem;">
+                                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                                <a href="faq.html" style="color: white; text-decoration: underline;">Check our FAQ</a>
+                            </li>
+                            <li style="margin-bottom: 0.75rem;">
+                                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                                <a href="about.html" style="color: white; text-decoration: underline;">Learn about us</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                                Response within 24 hours
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart"></i> for African education</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/app.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initContactForm();
+        });
+        
+        function initContactForm() {
+            const form = document.getElementById('contactForm');
+            if (form) {
+                form.addEventListener('submit', handleContactSubmit);
+            }
+        }
+        
+        async function handleContactSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const resetLoading = showLoading(submitBtn);
+            
+            try {
+                const contactData = {
+                    name: document.getElementById('name').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value.trim(),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'new'
+                };
+                
+                // Save to Firestore
+                await firebaseDB.collection('contactMessages').add(contactData);
+                
+                showFlashMessage('Message sent successfully! We\'ll get back to you within 24 hours.', 'success');
+                
+                // Reset form
+                document.getElementById('contactForm').reset();
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showFlashMessage('Failed to send message. Please try again.', 'error');
+            } finally {
+                resetLoading();
+            }
+        }
+        
+        function showLoading(element) {
+            const originalText = element.innerHTML;
+            element.disabled = true;
+            element.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            
+            return function() {
+                element.disabled = false;
+                element.innerHTML = originalText;
+            };
+        }
+        
+        function showFlashMessage(message, type) {
+            const container = document.createElement('div');
+            container.className = 'flash-messages';
+            container.style.position = 'fixed';
+            container.style.top = '80px';
+            container.style.right = '20px';
+            container.style.zIndex = '9999';
+            
+            const messageEl = document.createElement('div');
+            messageEl.className = `flash-message ${type}`;
+            messageEl.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+            
+            container.appendChild(messageEl);
+            document.body.appendChild(container);
+            
+            setTimeout(() => {
+                messageEl.style.opacity = '0';
+                setTimeout(() => container.remove(), 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session History - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    
+    <style>
+        .history-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-group label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+        }
+        
+        .session-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .session-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .session-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .session-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .session-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .session-notes {
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+        }
+        
+        .session-notes h5 {
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .session-notes p {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        .session-notes strong {
+            color: var(--text-primary);
+        }
+        
+        .review-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="children.html" class="nav-link">My Children</a>
+                <a href="../find-teacher.html" class="nav-link">Find Teacher</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="history.html" class="nav-link active">History</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- History Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>Session History</h2>
+                    <p>View completed sessions and progress reports</p>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="dashboard-section">
+                <div class="history-filters">
+                    <div class="filter-group">
+                        <label for="filterChild">Filter by Child</label>
+                        <select id="filterChild" onchange="applyFilters()">
+                            <option value="">All Children</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterSubject">Filter by Subject</label>
+                        <select id="filterSubject" onchange="applyFilters()">
+                            <option value="">All Subjects</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterDateRange">Date Range</label>
+                        <select id="filterDateRange" onchange="applyFilters()">
+                            <option value="">All Time</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 3 Months</option>
+                            <option value="180">Last 6 Months</option>
+                            <option value="365">Last Year</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-outline" onclick="resetFilters()">
+                        <i class="fas fa-times"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sessions List -->
+            <div id="sessionsList">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading session history...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/parent.js"></script>
+    
+    <script>
+        let allSessions = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!requireUserType(['parent'])) return;
+            
+            document.getElementById('userName').textContent = window.userData.firstName;
+            loadFilters();
+            loadSessions();
+        });
+        
+        async function loadFilters() {
+            // Load children
+            const childrenSnapshot = await firebaseDB.collection('children')
+                .where('parentId', '==', window.currentUser.uid)
+                .get();
+            
+            const childSelect = document.getElementById('filterChild');
+            childrenSnapshot.forEach(doc => {
+                const child = doc.data();
+                childSelect.innerHTML += `<option value="${doc.id}">${child.firstName} ${child.lastName || ''}</option>`;
+            });
+            
+            // Get unique subjects from completed bookings
+            const bookingsSnapshot = await firebaseDB.collection('bookings')
+                .where('parentId', '==', window.currentUser.uid)
+                .where('status', '==', 'completed')
+                .get();
+            
+            const subjects = new Set();
+            bookingsSnapshot.forEach(doc => {
+                subjects.add(doc.data().subject);
+            });
+            
+            const subjectSelect = document.getElementById('filterSubject');
+            subjects.forEach(subject => {
+                subjectSelect.innerHTML += `<option value="${subject}">${subject}</option>`;
+            });
+        }
+        
+        async function loadSessions() {
+            try {
+                const snapshot = await firebaseDB.collection('bookings')
+                    .where('parentId', '==', window.currentUser.uid)
+                    .where('status', '==', 'completed')
+                    .orderBy('sessionDate', 'desc')
+                    .get();
+                
+                allSessions = [];
+                
+                for (const doc of snapshot.docs) {
+                    const booking = { id: doc.id, ...doc.data() };
+                    
+                    // Get teacher and child info
+                    const teacherDoc = await firebaseDB.collection('teachers').doc(booking.teacherId).get();
+                    const childDoc = await firebaseDB.collection('children').doc(booking.childId).get();
+                    const teacherUserDoc = await firebaseDB.collection('users').doc(teacherDoc.data().userId).get();
+                    
+                    booking.teacher = { ...teacherDoc.data(), user: teacherUserDoc.data() };
+                    booking.child = childDoc.data();
+                    
+                    // Get session notes
+                    const sessionSnapshot = await firebaseDB.collection('sessions')
+                        .where('bookingId', '==', doc.id)
+                        .get();
+                    
+                    if (!sessionSnapshot.empty) {
+                        booking.session = sessionSnapshot.docs[0].data();
+                    }
+                    
+                    // Check if reviewed
+                    const reviewSnapshot = await firebaseDB.collection('reviews')
+                        .where('bookingId', '==', doc.id)
+                        .get();
+                    
+                    booking.reviewed = !reviewSnapshot.empty;
+                    if (booking.reviewed) {
+                        booking.review = reviewSnapshot.docs[0].data();
+                    }
+                    
+                    allSessions.push(booking);
+                }
+                
+                applyFilters();
+                
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+                document.getElementById('sessionsList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Error loading session history</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function applyFilters() {
+            const childFilter = document.getElementById('filterChild').value;
+            const subjectFilter = document.getElementById('filterSubject').value;
+            const dateRangeFilter = document.getElementById('filterDateRange').value;
+            
+            let filtered = allSessions;
+            
+            if (childFilter) {
+                filtered = filtered.filter(s => s.childId === childFilter);
+            }
+            
+            if (subjectFilter) {
+                filtered = filtered.filter(s => s.subject === subjectFilter);
+            }
+            
+            if (dateRangeFilter) {
+                const days = parseInt(dateRangeFilter);
+                const cutoff = new Date();
+                cutoff.setDate(cutoff.getDate() - days);
+                
+                filtered = filtered.filter(s => {
+                    const sessionDate = s.sessionDate.toDate();
+                    return sessionDate >= cutoff;
+                });
+            }
+            
+            renderSessions(filtered);
+        }
+        
+        function resetFilters() {
+            document.getElementById('filterChild').value = '';
+            document.getElementById('filterSubject').value = '';
+            document.getElementById('filterDateRange').value = '';
+            
+            renderSessions(allSessions);
+        }
+        
+        function renderSessions(sessions) {
+            const container = document.getElementById('sessionsList');
+            
+            if (sessions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <p>No completed sessions found</p>
+                        <a href="../find-teacher.html" class="btn btn-primary" style="margin-top: 1rem;">
+                            <i class="fas fa-search"></i> Find a Teacher
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = sessions.map(booking => {
+                const sessionDate = booking.sessionDate.toDate();
+                const dateStr = sessionDate.toLocaleDateString('en-GB', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                let reviewHTML = '';
+                if (booking.reviewed) {
+                    const stars = '★'.repeat(booking.review.rating) + '☆'.repeat(5 - booking.review.rating);
+                    reviewHTML = `
+                        <div class="review-badge">
+                            <span class="stars" style="color: #FFC107;">${stars}</span>
+                            <span>Reviewed</span>
+                        </div>
+                    `;
+                }
+                
+                let sessionNotesHTML = '';
+                if (booking.session) {
+                    sessionNotesHTML = `
+                        <div class="session-notes">
+                            <h5><i class="fas fa-file-alt"></i> Session Notes</h5>
+                            <p><strong>Topic:</strong> ${booking.session.lessonTopic || 'Not specified'}</p>
+                            <p><strong>What was covered:</strong> ${booking.session.lessonNotes || 'Not specified'}</p>
+                            ${booking.session.homework ? `<p><strong>Homework:</strong> ${booking.session.homework}</p>` : ''}
+                            ${booking.session.progressNotes ? `<p><strong>Progress:</strong> ${booking.session.progressNotes}</p>` : ''}
+                        </div>
+                    `;
+                } else {
+                    sessionNotesHTML = `
+                        <div class="session-notes">
+                            <p style="color: var(--text-secondary); font-style: italic;">No session notes available</p>
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="session-card">
+                        <div class="session-header">
+                            <div class="session-info">
+                                <h4>${booking.subject}</h4>
+                                <div class="session-meta">
+                                    <span><i class="fas fa-chalkboard-teacher"></i> ${booking.teacher.user.firstName} ${booking.teacher.user.lastName}</span>
+                                    <span><i class="fas fa-child"></i> ${booking.child.firstName}</span>
+                                    <span><i class="fas fa-calendar"></i> ${dateStr}</span>
+                                </div>
+                            </div>
+                            ${reviewHTML}
+                        </div>
+                        
+                        <div class="session-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Time</span>
+                                <span class="detail-value">${formatTime(booking.sessionTime)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Duration</span>
+                                <span class="detail-value">${booking.duration} hour${booking.duration > 1 ? 's' : ''}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Amount Paid</span>
+                                <span class="detail-value">${formatCurrency(booking.totalAmount)}</span>
+                            </div>
+                        </div>
+                        
+                        ${sessionNotesHTML}
+                        
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <a href="teacher-profile.html?id=${booking.teacherId}" class="btn btn-outline btn-small">
+                                <i class="fas fa-user"></i> View Teacher Profile
+                            </a>
+                            <button class="btn btn-primary btn-small" onclick="rebookSession('${booking.teacherId}', '${booking.subject}', '${booking.childId}')">
+                                <i class="fas fa-redo"></i> Book Again
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function rebookSession(teacherId, subject, childId) {
+            window.location.href = `teacher-profile.html?id=${teacherId}&subject=${encodeURIComponent(subject)}&child=${childId}`;
+        }
+    </script>
+</body>
+</html>

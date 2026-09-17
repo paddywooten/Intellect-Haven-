@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Children - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="children.html" class="nav-link active">My Children</a>
+                <a href="search.html" class="nav-link">Find Teacher</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Children Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>My Children</h2>
+                    <p>Manage your children's profiles and learning needs</p>
+                </div>
+                <button class="btn btn-primary" onclick="openAddChildModal()">
+                    <i class="fas fa-plus"></i> Add Child
+                </button>
+            </div>
+
+            <!-- Children List -->
+            <div class="dashboard-section">
+                <div class="children-grid" id="childrenList">
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading children...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Child Modal -->
+    <div class="modal" id="childModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="childModalTitle">Add Child</h3>
+                <button class="modal-close" onclick="closeModal('childModal')">&times;</button>
+            </div>
+            <form id="childForm">
+                <input type="hidden" id="childId">
+                
+                <div class="form-group">
+                    <label for="firstName">First Name <span style="color: var(--error-color);">*</span></label>
+                    <input type="text" id="firstName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName">
+                </div>
+                
+                <div class="form-group">
+                    <label for="dateOfBirth">Date of Birth</label>
+                    <input type="date" id="dateOfBirth">
+                </div>
+                
+                <div class="form-group">
+                    <label for="schoolLevel">School Level <span style="color: var(--error-color);">*</span></label>
+                    <select id="schoolLevel" required>
+                        <option value="">Select level</option>
+                        <option value="Nursery">Nursery / Kindergarten</option>
+                        <option value="Primary">Primary School</option>
+                        <option value="JHS">Junior High School (JHS)</option>
+                        <option value="SHS">Senior High School (SHS)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="curriculum">Curriculum <span style="color: var(--error-color);">*</span></label>
+                    <select id="curriculum" required>
+                        <option value="">Select curriculum</option>
+                        <option value="GES">GES (Ghana Education Service)</option>
+                        <option value="British">British Curriculum</option>
+                        <option value="Cambridge">Cambridge Curriculum</option>
+                        <option value="IB">International Baccalaureate (IB)</option>
+                        <option value="Montessori">Montessori</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="currentSchool">Current School</label>
+                    <input type="text" id="currentSchool" placeholder="e.g., Lincoln Community School">
+                </div>
+                
+                <div class="form-group">
+                    <label>Subjects Needed Help With</label>
+                    <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subjectsNeeded" value="Mathematics">
+                            <span>Mathematics</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subjectsNeeded" value="English Language">
+                            <span>English Language</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subjectsNeeded" value="Science">
+                            <span>Science</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subjectsNeeded" value="Physics">
+                            <span>Physics</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subjectsNeeded" value="Chemistry">
+                            <span>Chemistry</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subjectsNeeded" value="Biology">
+                            <span>Biology</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subjectsNeeded" value="French">
+                            <span>French</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subjectsNeeded" value="ICT">
+                            <span>ICT / Computing</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="learningChallenges">Learning Challenges (Optional)</label>
+                    <textarea id="learningChallenges" rows="3" placeholder="e.g., Struggles with fractions, needs help with reading comprehension..."></textarea>
+                    <small>Describe any specific learning challenges or areas that need extra attention</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="academicPerformance">Current Academic Performance (Optional)</label>
+                    <textarea id="academicPerformance" rows="3" placeholder="e.g., Average in Math, excellent in English, needs improvement in Science..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="saveChildBtn">
+                        <i class="fas fa-save"></i> Save Child
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('childModal')">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/parent.js"></script>
+    
+    <script>
+        function openAddChildModal() {
+            document.getElementById('childForm').reset();
+            document.getElementById('childId').value = '';
+            document.getElementById('childModalTitle').textContent = 'Add Child';
+            document.getElementById('childModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // Populate user name
+        if (window.userData) {
+            document.getElementById('userName').textContent = window.userData.firstName || 'Parent';
+        }
+    </script>
+    
+    <style>
+        .children-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .child-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .child-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .child-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .child-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .child-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .child-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .child-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .child-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .child-detail-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .child-detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+    </style>
+</body>
+</html>

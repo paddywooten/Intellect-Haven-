@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics - Intellect Haven Admin</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven <span class="admin-badge">Admin</span></h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="verification.html" class="nav-link">Verification</a>
+                <a href="users.html" class="nav-link">Users</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="reports.html" class="nav-link active">Reports</a>
+                <div class="nav-user">
+                    <span id="userName">Admin</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Reports Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>Reports & Analytics</h2>
+                    <p>Platform performance and insights</p>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value" id="metricRevenue">GHS 0</div>
+                    <div class="metric-label">Total Revenue</div>
+                    <div class="metric-change positive" id="revenueChange">
+                        <i class="fas fa-arrow-up"></i> 0%
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" id="metricBookings">0</div>
+                    <div class="metric-label">Total Bookings</div>
+                    <div class="metric-change positive" id="bookingsChange">
+                        <i class="fas fa-arrow-up"></i> 0%
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" id="metricUsers">0</div>
+                    <div class="metric-label">Active Users</div>
+                    <div class="metric-change positive" id="usersChange">
+                        <i class="fas fa-arrow-up"></i> 0%
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" id="metricRating">0.0</div>
+                    <div class="metric-label">Avg Rating</div>
+                    <div class="metric-change positive" id="ratingChange">
+                        <i class="fas fa-arrow-up"></i> 0%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="admin-grid">
+                <!-- Revenue Chart -->
+                <div class="report-card">
+                    <h3><i class="fas fa-chart-line"></i> Revenue Over Time</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Bookings Chart -->
+                <div class="report-card">
+                    <h3><i class="fas fa-chart-bar"></i> Bookings by Status</h3>
+                    <div class="chart-container">
+                        <canvas id="bookingsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- User Growth Chart -->
+                <div class="report-card">
+                    <h3><i class="fas fa-users"></i> User Growth</h3>
+                    <div class="chart-container">
+                        <canvas id="userGrowthChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Subject Distribution -->
+                <div class="report-card">
+                    <h3><i class="fas fa-book"></i> Popular Subjects</h3>
+                    <div class="chart-container">
+                        <canvas id="subjectsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Performers -->
+            <div class="admin-grid">
+                <!-- Top Teachers -->
+                <div class="report-card">
+                    <h3><i class="fas fa-trophy"></i> Top Teachers</h3>
+                    <div id="topTeachersList">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="report-card">
+                    <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    <div id="recentActivityList">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="dashboard-section">
+                <h3>Export Reports</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="exportReport('users')">
+                        <i class="fas fa-users"></i>
+                        <span>Export Users</span>
+                    </button>
+                    <button class="action-btn" onclick="exportReport('bookings')">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Export Bookings</span>
+                    </button>
+                    <button class="action-btn" onclick="exportReport('teachers')">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Export Teachers</span>
+                    </button>
+                    <button class="action-btn" onclick="exportReport('revenue')">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Export Revenue</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/admin.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllReports();
+        });
+        
+        async function loadAllReports() {
+            await loadKeyMetrics();
+            await loadRevenueChart();
+            await loadBookingsChart();
+            await loadUserGrowthChart();
+            await loadSubjectsChart();
+            await loadTopTeachers();
+            await loadRecentActivity();
+        }
+        
+        async function loadKeyMetrics() {
+            // Total Revenue
+            const completedSnapshot = await firebaseDB.collection('bookings')
+                .where('status', '==', 'completed')
+                .get();
+            
+            let totalRevenue = 0;
+            completedSnapshot.forEach(doc => {
+                totalRevenue += doc.data().totalAmount || 0;
+            });
+            document.getElementById('metricRevenue').textContent = formatCurrency(totalRevenue);
+            
+            // Total Bookings
+            const bookingsSnapshot = await firebaseDB.collection('bookings').get();
+            document.getElementById('metricBookings').textContent = bookingsSnapshot.size;
+            
+            // Active Users
+            const usersSnapshot = await firebaseDB.collection('users')
+                .where('isActive', '==', true)
+                .get();
+            document.getElementById('metricUsers').textContent = usersSnapshot.size;
+            
+            // Average Rating
+            const teachersSnapshot = await firebaseDB.collection('teachers').get();
+            let totalRating = 0;
+            let ratingCount = 0;
+            
+            teachersSnapshot.forEach(doc => {
+                const teacher = doc.data();
+                if (teacher.rating && teacher.rating > 0) {
+                    totalRating += teacher.rating;
+                    ratingCount++;
+                }
+            });
+            
+            const avgRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : '0.0';
+            document.getElementById('metricRating').textContent = avgRating;
+        }
+        
+        async function loadRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            
+            // Get last 6 months of data
+            const months = [];
+            const revenue = [];
+            
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date();
+                date.setMonth(date.getMonth() - i);
+                const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+                const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                
+                months.push(date.toLocaleString('default', { month: 'short' }));
+                
+                const snapshot = await firebaseDB.collection('bookings')
+                    .where('status', '==', 'completed')
+                    .where('sessionDate', '>=', monthStart)
+                    .where('sessionDate', '<=', monthEnd)
+                    .get();
+                
+                let monthRevenue = 0;
+                snapshot.forEach(doc => {
+                    monthRevenue += doc.data().totalAmount || 0;
+                });
+                
+                revenue.push(monthRevenue);
+            }
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Revenue (GHS)',
+                        data: revenue,
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function loadBookingsChart() {
+            const ctx = document.getElementById('bookingsChart').getContext('2d');
+            
+            const snapshot = await firebaseDB.collection('bookings').get();
+            
+            const statusCounts = {
+                pending: 0,
+                confirmed: 0,
+                completed: 0,
+                cancelled: 0
+            };
+            
+            snapshot.forEach(doc => {
+                const status = doc.data().status;
+                if (statusCounts.hasOwnProperty(status)) {
+                    statusCounts[status]++;
+                }
+            });
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Confirmed', 'Completed', 'Cancelled'],
+                    datasets: [{
+                        data: [
+                            statusCounts.pending,
+                            statusCounts.confirmed,
+                            statusCounts.completed,
+                            statusCounts.cancelled
+                        ],
+                        backgroundColor: [
+                            '#FF9800',
+                            '#2196F3',
+                            '#4CAF50',
+                            '#F44336'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function loadUserGrowthChart() {
+            const ctx = document.getElementById('userGrowthChart').getContext('2d');
+            
+            // Get last 6 months of user registrations
+            const months = [];
+            const teachers = [];
+            const parents = [];
+            
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date();
+                date.setMonth(date.getMonth() - i);
+                const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+                const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                
+                months.push(date.toLocaleString('default', { month: 'short' }));
+                
+                const teachersSnapshot = await firebaseDB.collection('users')
+                    .where('userType', '==', 'teacher')
+                    .where('createdAt', '>=', monthStart)
+                    .where('createdAt', '<=', monthEnd)
+                    .get();
+                
+                const parentsSnapshot = await firebaseDB.collection('users')
+                    .where('userType', '==', 'parent')
+                    .where('createdAt', '>=', monthStart)
+                    .where('createdAt', '<=', monthEnd)
+                    .get();
+                
+                teachers.push(teachersSnapshot.size);
+                parents.push(parentsSnapshot.size);
+            }
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Teachers',
+                            data: teachers,
+                            backgroundColor: '#4CAF50'
+                        },
+                        {
+                            label: 'Parents',
+                            data: parents,
+                            backgroundColor: '#2196F3'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function loadSubjectsChart() {
+            const ctx = document.getElementById('subjectsChart').getContext('2d');
+            
+            const snapshot = await firebaseDB.collection('bookings').get();
+            
+            const subjectCounts = {};
+            
+            snapshot.forEach(doc => {
+                const subject = doc.data().subject;
+                subjectCounts[subject] = (subjectCounts[subject] || 0) + 1;
+            });
+            
+            // Get top 8 subjects
+            const sortedSubjects = Object.entries(subjectCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+            
+            const labels = sortedSubjects.map(s => s[0]);
+            const data = sortedSubjects.map(s => s[1]);
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Bookings',
+                        data: data,
+                        backgroundColor: '#9C27B0'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function loadTopTeachers() {
+            const container = document.getElementById('topTeachersList');
+            
+            const snapshot = await firebaseDB.collection('teachers')
+                .where('verificationStatus', '==', 'verified')
+                .get();
+            
+            const teachers = [];
+            
+            for (const doc of snapshot.docs) {
+                const teacher = { id: doc.id, ...doc.data() };
+                const userDoc = await firebaseDB.collection('users').doc(teacher.userId).get();
+                teacher.user = userDoc.data();
+                teachers.push(teacher);
+            }
+            
+            // Sort by total sessions
+            teachers.sort((a, b) => (b.totalSessions || 0) - (a.totalSessions || 0));
+            
+            const topTeachers = teachers.slice(0, 5);
+            
+            if (topTeachers.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-trophy"></i>
+                        <p>No teachers yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = topTeachers.map((teacher, index) => `
+                <div class="user-card" style="margin-bottom: 0.75rem;">
+                    <div class="user-avatar">
+                        <div class="user-avatar-placeholder">
+                            ${(teacher.user.firstName[0] + teacher.user.lastName[0]).toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="user-info">
+                        <h4>
+                            <span style="color: #FFC107; margin-right: 0.5rem;">#${index + 1}</span>
+                            ${teacher.user.firstName} ${teacher.user.lastName}
+                        </h4>
+                        <p>${teacher.totalSessions || 0} sessions • ${(teacher.rating || 0).toFixed(1)} rating</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function loadRecentActivity() {
+            const container = document.getElementById('recentActivityList');
+            
+            const snapshot = await firebaseDB.collection('bookings')
+                .orderBy('createdAt', 'desc')
+                .limit(5)
+                .get();
+            
+            if (snapshot.empty) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <p>No recent activity</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let activityHTML = '';
+            
+            for (const doc of snapshot.docs) {
+                const booking = doc.data();
+                const createdAt = booking.createdAt.toDate();
+                const timeAgo = getTimeAgo(createdAt);
+                
+                let icon = 'fa-calendar';
+                let message = '';
+                
+                if (booking.status === 'pending') {
+                    icon = 'fa-clock';
+                    message = 'New booking request';
+                } else if (booking.status === 'confirmed') {
+                    icon = 'fa-check';
+                    message = 'Booking confirmed';
+                } else if (booking.status === 'completed') {
+                    icon = 'fa-check-circle';
+                    message = 'Session completed';
+                }
+                
+                activityHTML += `
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>${message} - ${booking.subject}</p>
+                            <span class="activity-time">${timeAgo}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = activityHTML;
+        }
+        
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + ' years ago';
+            
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + ' months ago';
+            
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + ' days ago';
+            
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + ' hours ago';
+            
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + ' minutes ago';
+            
+            return 'Just now';
+        }
+        
+        function exportReport(type) {
+            showFlashMessage(`Exporting ${type} report... (Feature coming soon)`, 'info');
+        }
+        
+        // Populate user name
+        if (window.userData) {
+            document.getElementById('userName').textContent = window.userData.firstName || 'Admin';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="availability.html" class="nav-link">Availability</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Verification Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>Teacher Verification</h2>
+                    <p>Upload documents to get verified and start receiving bookings</p>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Verification Status -->
+            <div class="dashboard-section" id="statusSection">
+                <div id="verificationStatus">
+                    <!-- Status will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Verification Process -->
+            <div class="dashboard-section">
+                <h3 style="margin-bottom: 1.5rem;">
+                    <i class="fas fa-info-circle"></i> Verification Process
+                </h3>
+                <div class="verification-steps">
+                    <div class="verification-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Upload Documents</h4>
+                            <p>Submit your ID, qualification certificates, and reference letters</p>
+                        </div>
+                    </div>
+                    <div class="verification-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Review Process</h4>
+                            <p>Our team will review your documents within 48 hours</p>
+                        </div>
+                    </div>
+                    <div class="verification-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Get Verified</h4>
+                            <p>Once approved, you'll receive a verified badge and can start teaching</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Upload Form -->
+            <div class="dashboard-section" id="uploadSection">
+                <form id="verificationForm" class="dashboard-form">
+                    <!-- ID Document -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-id-card"></i> Government ID <span style="color: var(--error-color);">*</span></h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                            Upload a clear photo of your Ghana Card, Passport, or Driver's License
+                        </p>
+                        <div class="file-upload-area" id="idUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload your ID</p>
+                            <small>JPG, PNG, PDF (max 5MB)</small>
+                            <input type="file" id="idDocument" accept="image/*,.pdf" style="display: none;">
+                        </div>
+                        <div id="idPreview" class="file-preview" style="display: none;">
+                            <i class="fas fa-file-pdf" style="font-size: 2rem; color: var(--primary-color);"></i>
+                            <div class="file-info">
+                                <div class="file-name" id="idFileName"></div>
+                                <div class="file-size" id="idFileSize"></div>
+                            </div>
+                            <button type="button" class="btn btn-small btn-outline" onclick="removeFile('id')">
+                                <i class="fas fa-times"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Qualification Certificate -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-certificate"></i> Qualification Certificate <span style="color: var(--error-color);">*</span></h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                            Upload your teaching certificate, degree, or diploma
+                        </p>
+                        <div class="file-upload-area" id="qualificationUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload your certificate</p>
+                            <small>JPG, PNG, PDF (max 5MB)</small>
+                            <input type="file" id="qualificationDocument" accept="image/*,.pdf" style="display: none;">
+                        </div>
+                        <div id="qualificationPreview" class="file-preview" style="display: none;">
+                            <i class="fas fa-file-pdf" style="font-size: 2rem; color: var(--primary-color);"></i>
+                            <div class="file-info">
+                                <div class="file-name" id="qualificationFileName"></div>
+                                <div class="file-size" id="qualificationFileSize"></div>
+                            </div>
+                            <button type="button" class="btn btn-small btn-outline" onclick="removeFile('qualification')">
+                                <i class="fas fa-times"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Reference Letter -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-envelope"></i> Reference Letter (Optional)</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                            Upload a reference letter from a previous employer or institution (recommended)
+                        </p>
+                        <div class="file-upload-area" id="referenceUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload reference letter</p>
+                            <small>JPG, PNG, PDF (max 5MB)</small>
+                            <input type="file" id="referenceDocument" accept="image/*,.pdf" style="display: none;">
+                        </div>
+                        <div id="referencePreview" class="file-preview" style="display: none;">
+                            <i class="fas fa-file-pdf" style="font-size: 2rem; color: var(--primary-color);"></i>
+                            <div class="file-info">
+                                <div class="file-name" id="referenceFileName"></div>
+                                <div class="file-size" id="referenceFileSize"></div>
+                            </div>
+                            <button type="button" class="btn btn-small btn-outline" onclick="removeFile('reference')">
+                                <i class="fas fa-times"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Agreement -->
+                    <div class="form-section">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreement" required>
+                            <span>
+                                I confirm that all documents uploaded are authentic and belong to me. I understand that 
+                                providing false information will result in immediate account termination.
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large" id="submitVerificationBtn">
+                            <i class="fas fa-paper-plane"></i> Submit for Verification
+                        </button>
+                        <a href="dashboard.html" class="btn btn-outline btn-large">Cancel</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Already Submitted -->
+            <div class="dashboard-section" id="submittedSection" style="display: none;">
+                <div class="empty-state">
+                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                    <h3>Documents Submitted</h3>
+                    <p>Your verification documents have been submitted and are under review.</p>
+                    <p>We'll notify you once the review is complete (usually within 48 hours).</p>
+                    <a href="dashboard.html" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/teacher.js"></script>
+    
+    <script>
+        // Verification page functionality
+        let uploadedFiles = {
+            id: null,
+            qualification: null,
+            reference: null
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            checkVerificationStatus();
+            initFileUploads();
+            
+            const form = document.getElementById('verificationForm');
+            if (form) {
+                form.addEventListener('submit', handleVerificationSubmit);
+            }
+        });
+        
+        async function checkVerificationStatus() {
+            if (!window.teacherData) return;
+            
+            const status = window.teacherData.verificationStatus;
+            const statusSection = document.getElementById('verificationStatus');
+            const uploadSection = document.getElementById('uploadSection');
+            const submittedSection = document.getElementById('submittedSection');
+            
+            if (status === 'verified') {
+                statusSection.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--success-color); margin-bottom: 1rem;"></i>
+                        <h3 style="color: var(--success-color);">You're Verified!</h3>
+                        <p>Your account has been verified. You can now receive bookings from parents.</p>
+                    </div>
+                `;
+                uploadSection.style.display = 'none';
+            } else if (status === 'pending') {
+                statusSection.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; background: #FFF3E0; border-radius: var(--radius-md);">
+                        <i class="fas fa-clock" style="font-size: 4rem; color: #E65100; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #E65100;">Verification Pending</h3>
+                        <p>Your documents are under review. We'll notify you once the review is complete.</p>
+                    </div>
+                `;
+                uploadSection.style.display = 'none';
+                submittedSection.style.display = 'block';
+            } else if (status === 'rejected') {
+                const reason = window.teacherData.rejectionReason || 'Please review and resubmit your documents.';
+                statusSection.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; background: #FFEBEE; border-radius: var(--radius-md);">
+                        <i class="fas fa-times-circle" style="font-size: 4rem; color: #C62828; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #C62828;">Verification Rejected</h3>
+                        <p>${reason}</p>
+                        <p style="margin-top: 1rem;">Please upload corrected documents below.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function initFileUploads() {
+            // ID Document
+            setupFileUpload('idUploadArea', 'idDocument', 'id', 'idPreview', 'idFileName', 'idFileSize');
+            
+            // Qualification Document
+            setupFileUpload('qualificationUploadArea', 'qualificationDocument', 'qualification', 'qualificationPreview', 'qualificationFileName', 'qualificationFileSize');
+            
+            // Reference Document
+            setupFileUpload('referenceUploadArea', 'referenceDocument', 'reference', 'referencePreview', 'referenceFileName', 'referenceFileSize');
+        }
+        
+        function setupFileUpload(areaId, inputId, type, previewId, nameId, sizeId) {
+            const area = document.getElementById(areaId);
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            area.addEventListener('click', () => input.click());
+            
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Validate file
+                    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                    if (!validTypes.includes(file.type)) {
+                        showFlashMessage('Please upload JPG, PNG, or PDF files only', 'error');
+                        return;
+                    }
+                    
+                    if (file.size > 5 * 1024 * 1024) {
+                        showFlashMessage('File must be less than 5MB', 'error');
+                        return;
+                    }
+                    
+                    // Store file
+                    uploadedFiles[type] = file;
+                    
+                    // Show preview
+                    document.getElementById(nameId).textContent = file.name;
+                    document.getElementById(sizeId).textContent = formatFileSize(file.size);
+                    preview.style.display = 'flex';
+                    area.style.display = 'none';
+                }
+            });
+        }
+        
+        function removeFile(type) {
+            uploadedFiles[type] = null;
+            
+            // Reset UI
+            document.getElementById(type + 'Document').value = '';
+            document.getElementById(type + 'Preview').style.display = 'none';
+            document.getElementById(type + 'UploadArea').style.display = 'block';
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+        
+        async function handleVerificationSubmit(e) {
+            e.preventDefault();
+            
+            // Validate required files
+            if (!uploadedFiles.id) {
+                showFlashMessage('Please upload your government ID', 'error');
+                return;
+            }
+            
+            if (!uploadedFiles.qualification) {
+                showFlashMessage('Please upload your qualification certificate', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitVerificationBtn');
+            const resetLoading = showLoading(submitBtn);
+            
+            try {
+                const documents = {};
+                
+                // Upload ID
+                showFlashMessage('Uploading ID...', 'info');
+                const idResult = await uploadFile(
+                    uploadedFiles.id,
+                    `teachers/${window.currentUser.uid}/id_${Date.now()}_${uploadedFiles.id.name}`
+                );
+                if (idResult.success) {
+                    documents.idCard = idResult.url;
+                } else {
+                    throw new Error('Failed to upload ID');
+                }
+                
+                // Upload Qualification
+                showFlashMessage('Uploading qualification...', 'info');
+                const qualResult = await uploadFile(
+                    uploadedFiles.qualification,
+                    `teachers/${window.currentUser.uid}/qualification_${Date.now()}_${uploadedFiles.qualification.name}`
+                );
+                if (qualResult.success) {
+                    documents.qualification = qualResult.url;
+                } else {
+                    throw new Error('Failed to upload qualification');
+                }
+                
+                // Upload Reference (optional)
+                if (uploadedFiles.reference) {
+                    showFlashMessage('Uploading reference...', 'info');
+                    const refResult = await uploadFile(
+                        uploadedFiles.reference,
+                        `teachers/${window.currentUser.uid}/reference_${Date.now()}_${uploadedFiles.reference.name}`
+                    );
+                    if (refResult.success) {
+                        documents.references = refResult.url;
+                    }
+                }
+                
+                // Update teacher document
+                await firebaseDB.collection('teachers').doc(window.currentUser.uid).update({
+                    verificationStatus: 'pending',
+                    verificationDocuments: documents,
+                    submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showFlashMessage('Documents submitted successfully!', 'success');
+                
+                // Reload page to show submitted state
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error submitting verification:', error);
+                showFlashMessage(error.message || 'Failed to submit verification', 'error');
+            } finally {
+                resetLoading();
+            }
+        }
+        
+        // Populate user name
+        if (window.userData) {
+            document.getElementById('userName').textContent = window.userData.firstName || 'Teacher';
+        }
+    </script>
+</body>
+</html>

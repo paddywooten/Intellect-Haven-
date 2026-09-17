@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reviews - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="children.html" class="nav-link">My Children</a>
+                <a href="search.html" class="nav-link">Find Teacher</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Reviews Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>My Reviews</h2>
+                    <p>Reviews you've left for teachers</p>
+                </div>
+                <a href="bookings.html" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Bookings
+                </a>
+            </div>
+
+            <!-- Reviews List -->
+            <div class="dashboard-section">
+                <div id="reviewsList">
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading your reviews...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/parent.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReviews();
+        });
+        
+        async function loadReviews() {
+            try {
+                const snapshot = await firebaseDB.collection('reviews')
+                    .where('parentId', '==', window.currentUser.uid)
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                const container = document.getElementById('reviewsList');
+                
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-star"></i>
+                            <p>You haven't left any reviews yet</p>
+                            <p>Complete a session and leave a review to help other parents!</p>
+                            <a href="bookings.html" class="btn btn-primary" style="margin-top: 1rem;">
+                                <i class="fas fa-calendar-check"></i> View Bookings
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let reviews = [];
+                
+                for (const doc of snapshot.docs) {
+                    const review = { id: doc.id, ...doc.data() };
+                    
+                    // Get teacher info
+                    const teacherDoc = await firebaseDB.collection('teachers').doc(review.teacherId).get();
+                    const teacherUserDoc = await firebaseDB.collection('users').doc(teacherDoc.data().userId).get();
+                    
+                    review.teacher = { ...teacherDoc.data(), user: teacherUserDoc.data() };
+                    
+                    // Get booking info
+                    const bookingDoc = await firebaseDB.collection('bookings').doc(review.bookingId).get();
+                    review.booking = bookingDoc.data();
+                    
+                    reviews.push(review);
+                }
+                
+                renderReviews(reviews);
+                
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                document.getElementById('reviewsList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Error loading reviews</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderReviews(reviews) {
+            const container = document.getElementById('reviewsList');
+            
+            container.innerHTML = reviews.map(review => {
+                const createdAt = review.createdAt.toDate();
+                const dateStr = createdAt.toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                
+                const sessionDate = review.booking.sessionDate.toDate();
+                const sessionDateStr = sessionDate.toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <div class="review-card-full">
+                        <div class="review-header">
+                            <div class="review-teacher">
+                                <div class="teacher-avatar">
+                                    ${review.teacher.profilePhoto ? 
+                                        `<img src="${review.teacher.profilePhoto}" alt="${review.teacher.user.firstName}">` : 
+                                        `<div class="avatar-placeholder">${(review.teacher.user.firstName[0] + review.teacher.user.lastName[0]).toUpperCase()}</div>`
+                                    }
+                                </div>
+                                <div class="teacher-info">
+                                    <h4>${review.teacher.user.firstName} ${review.teacher.user.lastName}</h4>
+                                    <p>${review.booking.subject} session on ${sessionDateStr}</p>
+                                </div>
+                            </div>
+                            <div class="review-date">
+                                ${dateStr}
+                            </div>
+                        </div>
+                        
+                        <div class="review-rating-display">
+                            <span class="stars">${stars}</span>
+                            <span class="rating-number">${review.rating}.0</span>
+                        </div>
+                        
+                        <div class="review-content">
+                            <p>${review.comment}</p>
+                        </div>
+                        
+                        <div class="review-actions">
+                            <a href="teacher-profile.html?id=${review.teacherId}" class="btn btn-outline btn-small">
+                                <i class="fas fa-user"></i> View Teacher Profile
+                            </a>
+                            <button class="btn btn-outline btn-small" onclick="rebookTeacher('${review.teacherId}')">
+                                <i class="fas fa-redo"></i> Book Again
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function rebookTeacher(teacherId) {
+            window.location.href = `teacher-profile.html?id=${teacherId}`;
+        }
+        
+        // Populate user name
+        if (window.userData) {
+            document.getElementById('userName').textContent = window.userData.firstName || 'Parent';
+        }
+    </script>
+    
+    <style>
+        .review-card-full {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #FFC107;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .review-teacher {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .teacher-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .teacher-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .teacher-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .teacher-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .review-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .review-rating-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .review-rating-display .stars {
+            font-size: 2rem;
+            color: #FFC107;
+        }
+        
+        .rating-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .review-content {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1.5rem;
+        }
+        
+        .review-content p {
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .review-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+    </style>
+</body>
+</html>

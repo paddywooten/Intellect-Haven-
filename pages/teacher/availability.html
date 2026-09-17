@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Availability - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    
+    <style>
+        .availability-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .day-row {
+            display: grid;
+            grid-template-columns: 150px 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+        }
+        
+        .day-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .time-slots {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .time-slot {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .time-slot:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .time-slot.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .day-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-color);
+            transition: .4s;
+            border-radius: 26px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        
+        .time-slots.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <a href="availability.html" class="nav-link active">Availability</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Availability Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>Set Your Availability</h2>
+                    <p>Choose when you're available to teach each week</p>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Info Box -->
+            <div class="dashboard-section">
+                <div style="background: #E3F2FD; padding: 1.5rem; border-radius: var(--radius-md); border-left: 4px solid #1565C0;">
+                    <h4 style="color: #1565C0; margin-bottom: 0.5rem;">
+                        <i class="fas fa-info-circle"></i> How It Works
+                    </h4>
+                    <p style="color: #1565C0; margin: 0;">
+                        Enable the days you're available and select your preferred time slots. 
+                        Parents will only be able to book sessions during your available times.
+                        You can update your availability anytime.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Availability Form -->
+            <div class="dashboard-section">
+                <form id="availabilityForm" class="dashboard-form">
+                    <div class="availability-grid" id="availabilityGrid">
+                        <!-- Days will be generated by JavaScript -->
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="form-actions" style="margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary btn-large" id="saveAvailabilityBtn">
+                            <i class="fas fa-save"></i> Save Availability
+                        </button>
+                        <a href="dashboard.html" class="btn btn-outline btn-large">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/teacher.js"></script>
+    
+    <script>
+        const days = [
+            { id: 0, name: 'Monday' },
+            { id: 1, name: 'Tuesday' },
+            { id: 2, name: 'Wednesday' },
+            { id: 3, name: 'Thursday' },
+            { id: 4, name: 'Friday' },
+            { id: 5, name: 'Saturday' },
+            { id: 6, name: 'Sunday' }
+        ];
+        
+        const timeSlots = [
+            '08:00', '09:00', '10:00', '11:00', '12:00',
+            '13:00', '14:00', '15:00', '16:00', '17:00',
+            '18:00', '19:00', '20:00'
+        ];
+        
+        let availabilityData = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            generateAvailabilityGrid();
+            loadAvailability();
+            
+            const form = document.getElementById('availabilityForm');
+            if (form) {
+                form.addEventListener('submit', handleAvailabilitySubmit);
+            }
+        });
+        
+        function generateAvailabilityGrid() {
+            const grid = document.getElementById('availabilityGrid');
+            
+            days.forEach(day => {
+                const dayRow = document.createElement('div');
+                dayRow.className = 'day-row';
+                dayRow.innerHTML = `
+                    <div class="day-label">${day.name}</div>
+                    <div class="time-slots disabled" id="slots-${day.id}">
+                        ${timeSlots.map(time => `
+                            <div class="time-slot" data-day="${day.id}" data-time="${time}">
+                                ${formatTimeSlot(time)}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="day-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-${day.id}" onchange="toggleDay(${day.id})">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                `;
+                
+                grid.appendChild(dayRow);
+            });
+            
+            // Add click handlers to time slots
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.addEventListener('click', function() {
+                    if (!this.parentElement.classList.contains('disabled')) {
+                        this.classList.toggle('selected');
+                    }
+                });
+            });
+        }
+        
+        function toggleDay(dayId) {
+            const toggle = document.getElementById(`toggle-${dayId}`);
+            const slotsContainer = document.getElementById(`slots-${dayId}`);
+            
+            if (toggle.checked) {
+                slotsContainer.classList.remove('disabled');
+            } else {
+                slotsContainer.classList.add('disabled');
+                // Deselect all slots
+                slotsContainer.querySelectorAll('.time-slot').forEach(slot => {
+                    slot.classList.remove('selected');
+                });
+            }
+        }
+        
+        function formatTimeSlot(time) {
+            const [hours, minutes] = time.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}:00 ${ampm}`;
+        }
+        
+        async function loadAvailability() {
+            if (!window.teacherData) return;
+            
+            const availability = window.teacherData.availability || [];
+            
+            availability.forEach(item => {
+                const toggle = document.getElementById(`toggle-${item.day}`);
+                if (toggle) {
+                    toggle.checked = true;
+                    toggleDay(item.day);
+                    
+                    // Select time slots
+                    if (item.times) {
+                        item.times.forEach(time => {
+                            const slot = document.querySelector(`[data-day="${item.day}"][data-time="${time}"]`);
+                            if (slot) {
+                                slot.classList.add('selected');
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        
+        async function handleAvailabilitySubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('saveAvailabilityBtn');
+            const resetLoading = showLoading(submitBtn);
+            
+            try {
+                const availability = [];
+                
+                days.forEach(day => {
+                    const toggle = document.getElementById(`toggle-${day.id}`);
+                    if (toggle.checked) {
+                        const selectedSlots = document.querySelectorAll(`[data-day="${day.id}"].selected`);
+                        const times = Array.from(selectedSlots).map(slot => slot.dataset.time);
+                        
+                        if (times.length > 0) {
+                            availability.push({
+                                day: day.id,
+                                dayName: day.name,
+                                times: times
+                            });
+                        }
+                    }
+                });
+                
+                if (availability.length === 0) {
+                    throw new Error('Please select at least one available time slot');
+                }
+                
+                // Update Firestore
+                await firebaseDB.collection('teachers').doc(window.currentUser.uid).update({
+                    availability: availability,
+                    isAvailable: true,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showFlashMessage('Availability saved successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error saving availability:', error);
+                showFlashMessage(error.message, 'error');
+            } finally {
+                resetLoading();
+            }
+        }
+        
+        // Populate user name
+        if (window.userData) {
+            document.getElementById('userName').textContent = window.userData.firstName || 'Teacher';
+        }
+    </script>
+</body>
+</html>

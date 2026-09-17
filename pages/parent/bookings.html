@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    
+    <style>
+        .bookings-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .booking-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .booking-card.pending {
+            border-left-color: #FF9800;
+        }
+        
+        .booking-card.confirmed {
+            border-left-color: #4CAF50;
+        }
+        
+        .booking-card.completed {
+            border-left-color: #2196F3;
+        }
+        
+        .booking-card.cancelled {
+            border-left-color: #F44336;
+            opacity: 0.7;
+        }
+        
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .booking-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .booking-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .booking-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .booking-status {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .booking-status.pending {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+        
+        .booking-status.confirmed {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .booking-status.completed {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+        
+        .booking-status.cancelled {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+        
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .booking-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .session-notes-section {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+        }
+        
+        .session-notes-section h5 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="children.html" class="nav-link">My Children</a>
+                <a href="../find-teacher.html" class="nav-link">Find Teacher</a>
+                <a href="bookings.html" class="nav-link active">Bookings</a>
+                <a href="history.html" class="nav-link">History</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Bookings Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>My Bookings</h2>
+                    <p>Manage your tutoring sessions</p>
+                </div>
+                <a href="../find-teacher.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Book New Session
+                </a>
+            </div>
+
+            <!-- Filters -->
+            <div class="bookings-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="pending">Pending</button>
+                <button class="filter-btn" data-filter="confirmed">Confirmed</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+            </div>
+
+            <!-- Bookings List -->
+            <div id="bookingsList">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading bookings...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Leave a Review</h3>
+                <button class="modal-close" onclick="closeModal('reviewModal')">&times;</button>
+            </div>
+            <form id="reviewForm">
+                <input type="hidden" id="reviewBookingId">
+                <input type="hidden" id="reviewTeacherId">
+                
+                <div class="form-group">
+                    <label>Rating <span style="color: var(--error-color);">*</span></label>
+                    <div class="star-rating" id="starRating">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                    <input type="hidden" id="reviewRating" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reviewComment">Your Review <span style="color: var(--error-color);">*</span></label>
+                    <textarea id="reviewComment" rows="5" required placeholder="Share your experience with this teacher..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitReviewBtn">
+                        <i class="fas fa-paper-plane"></i> Submit Review
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('reviewModal')">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/parent.js"></script>
+    
+    <script>
+        let allBookings = [];
+        let currentFilter = 'all';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!requireUserType(['parent'])) return;
+            
+            document.getElementById('userName').textContent = window.userData.firstName;
+            loadBookings();
+            initFilters();
+            initReviewForm();
+        });
+        
+        function initFilters() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderBookings();
+                });
+            });
+        }
+        
+        async function loadBookings() {
+            try {
+                const snapshot = await firebaseDB.collection('bookings')
+                    .where('parentId', '==', window.currentUser.uid)
+                    .orderBy('sessionDate', 'desc')
+                    .get();
+                
+                allBookings = [];
+                
+                for (const doc of snapshot.docs) {
+                    const booking = { id: doc.id, ...doc.data() };
+                    
+                    // Get teacher and child info
+                    const teacherDoc = await firebaseDB.collection('teachers').doc(booking.teacherId).get();
+                    const childDoc = await firebaseDB.collection('children').doc(booking.childId).get();
+                    const teacherUserDoc = await firebaseDB.collection('users').doc(teacherDoc.data().userId).get();
+                    
+                    booking.teacher = { ...teacherDoc.data(), user: teacherUserDoc.data() };
+                    booking.child = childDoc.data();
+                    
+                    // Get session notes if exists
+                    const sessionSnapshot = await firebaseDB.collection('sessions')
+                        .where('bookingId', '==', doc.id)
+                        .get();
+                    
+                    if (!sessionSnapshot.empty) {
+                        booking.session = sessionSnapshot.docs[0].data();
+                    }
+                    
+                    // Check if reviewed
+                    const reviewSnapshot = await firebaseDB.collection('reviews')
+                        .where('bookingId', '==', doc.id)
+                        .get();
+                    
+                    booking.reviewed = !reviewSnapshot.empty;
+                    
+                    allBookings.push(booking);
+                }
+                
+                renderBookings();
+                
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                document.getElementById('bookingsList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Error loading bookings</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderBookings() {
+            const container = document.getElementById('bookingsList');
+            
+            let filtered = allBookings;
+            if (currentFilter !== 'all') {
+                filtered = allBookings.filter(b => b.status === currentFilter);
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <p>No ${currentFilter === 'all' ? '' : currentFilter} bookings found</p>
+                        <a href="../find-teacher.html" class="btn btn-primary" style="margin-top: 1rem;">
+                            <i class="fas fa-search"></i> Find a Teacher
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filtered.map(booking => {
+                const sessionDate = booking.sessionDate.toDate();
+                const dateStr = sessionDate.toLocaleDateString('en-GB', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                const isPast = sessionDate < new Date();
+                const canReview = booking.status === 'completed' && !booking.reviewed;
+                
+                let actions = '';
+                
+                if (booking.status === 'pending') {
+                    actions = `
+                        <button class="btn btn-outline btn-small" onclick="cancelBooking('${booking.id}')">
+                            <i class="fas fa-times"></i> Cancel Request
+                        </button>
+                    `;
+                } else if (canReview) {
+                    actions = `
+                        <button class="btn btn-primary btn-small" onclick="openReviewModal('${booking.id}', '${booking.teacherId}')">
+                            <i class="fas fa-star"></i> Leave Review
+                        </button>
+                    `;
+                } else if (booking.status === 'completed' && booking.reviewed) {
+                    actions = `
+                        <span class="booking-status completed">
+                            <i class="fas fa-check"></i> Reviewed
+                        </span>
+                    `;
+                }
+                
+                let sessionNotesHTML = '';
+                if (booking.session) {
+                    sessionNotesHTML = `
+                        <div class="session-notes-section">
+                            <h5><i class="fas fa-file-alt"></i> Session Notes</h5>
+                            <p><strong>Topic:</strong> ${booking.session.lessonTopic}</p>
+                            <p><strong>Covered:</strong> ${booking.session.lessonNotes}</p>
+                            ${booking.session.homework ? `<p><strong>Homework:</strong> ${booking.session.homework}</p>` : ''}
+                            ${booking.session.progressNotes ? `<p><strong>Progress:</strong> ${booking.session.progressNotes}</p>` : ''}
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="booking-card ${booking.status}">
+                        <div class="booking-header">
+                            <div class="booking-info">
+                                <h4>${booking.subject}</h4>
+                                <div class="booking-meta">
+                                    <span><i class="fas fa-chalkboard-teacher"></i> ${booking.teacher.user.firstName} ${booking.teacher.user.lastName}</span>
+                                    <span><i class="fas fa-child"></i> ${booking.child.firstName}</span>
+                                </div>
+                            </div>
+                            <div class="booking-status ${booking.status}">
+                                ${booking.status}
+                            </div>
+                        </div>
+                        
+                        <div class="booking-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Date</span>
+                                <span class="detail-value">${dateStr}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Time</span>
+                                <span class="detail-value">${formatTime(booking.sessionTime)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Duration</span>
+                                <span class="detail-value">${booking.duration} hour${booking.duration > 1 ? 's' : ''}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Amount</span>
+                                <span class="detail-value">${formatCurrency(booking.totalAmount)}</span>
+                            </div>
+                        </div>
+                        
+                        ${booking.notes ? `
+                            <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-sm);">
+                                <strong>Your Notes:</strong> ${booking.notes}
+                            </div>
+                        ` : ''}
+                        
+                        ${sessionNotesHTML}
+                        
+                        ${actions ? `<div class="booking-actions">${actions}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        async function cancelBooking(bookingId) {
+            if (!confirm('Are you sure you want to cancel this booking request?')) return;
+            
+            try {
+                await firebaseDB.collection('bookings').doc(bookingId).update({
+                    status: 'cancelled',
+                    cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    cancelledBy: 'parent',
+                    cancellationReason: 'Cancelled by parent'
+                });
+                
+                showFlashMessage('Booking cancelled', 'success');
+                loadBookings();
+                
+            } catch (error) {
+                console.error('Error cancelling booking:', error);
+                showFlashMessage('Error cancelling booking', 'error');
+            }
+        }
+        
+        function openReviewModal(bookingId, teacherId) {
+            document.getElementById('reviewBookingId').value = bookingId;
+            document.getElementById('reviewTeacherId').value = teacherId;
+            document.getElementById('reviewForm').reset();
+            document.getElementById('reviewRating').value = '';
+            
+            // Reset stars
+            document.querySelectorAll('#starRating i').forEach(star => {
+                star.className = 'far fa-star';
+            });
+            
+            document.getElementById('reviewModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function initReviewForm() {
+            // Star rating
+            const stars = document.querySelectorAll('#starRating i');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    document.getElementById('reviewRating').value = rating;
+                    
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.className = 'fas fa-star';
+                        } else {
+                            s.className = 'far fa-star';
+                        }
+                    });
+                });
+            });
+            
+            // Form submission
+            const form = document.getElementById('reviewForm');
+            if (form) {
+                form.addEventListener('submit', handleReviewSubmit);
+            }
+        }
+        
+        async function handleReviewSubmit(e) {
+            e.preventDefault();
+            
+            const bookingId = document.getElementById('reviewBookingId').value;
+            const teacherId = document.getElementById('reviewTeacherId').value;
+            const rating = parseInt(document.getElementById('reviewRating').value);
+            const comment = document.getElementById('reviewComment').value.trim();
+            
+            if (!rating) {
+                showFlashMessage('Please select a rating', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitReviewBtn');
+            const resetLoading = showLoading(submitBtn);
+            
+            try {
+                // Create review
+                await firebaseDB.collection('reviews').add({
+                    bookingId: bookingId,
+                    teacherId: teacherId,
+                    parentId: window.currentUser.uid,
+                    rating: rating,
+                    comment: comment,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Update teacher stats
+                const teacherDoc = await firebaseDB.collection('teachers').doc(teacherId).get();
+                const teacher = teacherDoc.data();
+                
+                const newTotalReviews = (teacher.totalReviews || 0) + 1;
+                const newRating = ((teacher.rating || 0) * (teacher.totalReviews || 0) + rating) / newTotalReviews;
+                
+                await firebaseDB.collection('teachers').doc(teacherId).update({
+                    totalReviews: newTotalReviews,
+                    rating: newRating
+                });
+                
+                closeModal('reviewModal');
+                showFlashMessage('Review submitted! Thank you for your feedback.', 'success');
+                loadBookings();
+                
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                showFlashMessage('Error submitting review', 'error');
+            } finally {
+                resetLoading();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings Management - Intellect Haven Admin</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven <span class="admin-badge">Admin</span></h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="verification.html" class="nav-link">Verification</a>
+                <a href="users.html" class="nav-link">Users</a>
+                <a href="bookings.html" class="nav-link active">Bookings</a>
+                <a href="reports.html" class="nav-link">Reports</a>
+                <div class="nav-user">
+                    <span id="userName">Admin</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Bookings Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>Bookings Management</h2>
+                    <p>Monitor and manage all platform bookings</p>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="quick-stats-row">
+                <div class="quick-stat">
+                    <div class="quick-stat-icon" style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <h4 id="totalBookingsCount">0</h4>
+                        <p>Total Bookings</p>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <h4 id="pendingBookingsCount">0</h4>
+                        <p>Pending</p>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <h4 id="confirmedBookingsCount">0</h4>
+                        <p>Confirmed</p>
+                    </div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-icon info">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <h4 id="completedBookingsCount">0</h4>
+                        <p>Completed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="admin-filters">
+                <div class="filters-grid">
+                    <div class="form-group">
+                        <label for="filterBookingStatus">Status</label>
+                        <select id="filterBookingStatus" onchange="applyFilters()">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterDateRange">Date Range</label>
+                        <select id="filterDateRange" onchange="applyFilters()">
+                            <option value="all">All Time</option>
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                    </div>
+                    <div class="form-group search-box">
+                        <label for="searchBooking">Search</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchBooking" placeholder="Search by subject, teacher, or parent..." oninput="applyFilters()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bookings Table -->
+            <div class="dashboard-section">
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Subject</th>
+                                <th>Teacher</th>
+                                <th>Parent</th>
+                                <th>Child</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody">
+                            <tr>
+                                <td colspan="8">
+                                    <div class="loading-state">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        <p>Loading bookings...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/admin.js"></script>
+    
+    <script>
+        let allBookings = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBookingStats();
+            applyFilters();
+        });
+        
+        async function loadBookingStats() {
+            const snapshot = await firebaseDB.collection('bookings').get();
+            document.getElementById('totalBookingsCount').textContent = snapshot.size;
+            
+            let pending = 0, confirmed = 0, completed = 0;
+            snapshot.forEach(doc => {
+                const booking = doc.data();
+                if (booking.status === 'pending') pending++;
+                else if (booking.status === 'confirmed') confirmed++;
+                else if (booking.status === 'completed') completed++;
+            });
+            
+            document.getElementById('pendingBookingsCount').textContent = pending;
+            document.getElementById('confirmedBookingsCount').textContent = confirmed;
+            document.getElementById('completedBookingsCount').textContent = completed;
+        }
+        
+        async function applyFilters() {
+            const status = document.getElementById('filterBookingStatus').value;
+            const dateRange = document.getElementById('filterDateRange').value;
+            const search = document.getElementById('searchBooking').value.toLowerCase();
+            
+            let query = firebaseDB.collection('bookings');
+            
+            if (status !== 'all') {
+                query = query.where('status', '==', status);
+            }
+            
+            const snapshot = await query.orderBy('createdAt', 'desc').limit(200).get();
+            
+            allBookings = [];
+            
+            for (const doc of snapshot.docs) {
+                const booking = { id: doc.id, ...doc.data() };
+                
+                // Apply date filter
+                if (dateRange !== 'all') {
+                    const days = parseInt(dateRange);
+                    const cutoff = new Date();
+                    cutoff.setDate(cutoff.getDate() - days);
+                    
+                    if (booking.createdAt.toDate() < cutoff) {
+                        continue;
+                    }
+                }
+                
+                // Get teacher info
+                const teacherDoc = await firebaseDB.collection('teachers').doc(booking.teacherId).get();
+                const teacherUserDoc = await firebaseDB.collection('users').doc(teacherDoc.data().userId).get();
+                booking.teacher = teacherUserDoc.data();
+                
+                // Get parent info
+                const parentDoc = await firebaseDB.collection('users').doc(booking.parentId).get();
+                booking.parent = parentDoc.data();
+                
+                // Get child info
+                const childDoc = await firebaseDB.collection('children').doc(booking.childId).get();
+                booking.child = childDoc.data();
+                
+                // Apply search filter
+                if (search) {
+                    const subject = booking.subject.toLowerCase();
+                    const teacherName = `${booking.teacher.firstName} ${booking.teacher.lastName}`.toLowerCase();
+                    const parentName = `${booking.parent.firstName} ${booking.parent.lastName}`.toLowerCase();
+                    const childName = `${booking.child.firstName} ${booking.child.lastName || ''}`.toLowerCase();
+                    
+                    if (!subject.includes(search) && 
+                        !teacherName.includes(search) && 
+                        !parentName.includes(search) && 
+                        !childName.includes(search)) {
+                        continue;
+                    }
+                }
+                
+                allBookings.push(booking);
+            }
+            
+            renderBookings(allBookings);
+        }
+        
+        function renderBookings(bookings) {
+            const tbody = document.getElementById('bookingsTableBody');
+            
+            if (bookings.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <i class="fas fa-calendar-times"></i>
+                                <p>No bookings found</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = bookings.map(booking => {
+                const sessionDate = booking.sessionDate.toDate();
+                const dateStr = sessionDate.toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <tr>
+                        <td>${dateStr}<br><small>${formatTime(booking.sessionTime)}</small></td>
+                        <td>${booking.subject}</td>
+                        <td>${booking.teacher.firstName} ${booking.teacher.lastName}</td>
+                        <td>${booking.parent.firstName} ${booking.parent.lastName}</td>
+                        <td>${booking.child.firstName} ${booking.child.lastName || ''}</td>
+                        <td><strong>${formatCurrency(booking.totalAmount)}</strong></td>
+                        <td><span class="verification-status ${booking.status}">${booking.status}</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-outline btn-small" onclick="viewBookingDetails('${booking.id}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function viewBookingDetails(bookingId) {
+            const booking = allBookings.find(b => b.id === bookingId);
+            
+            if (!booking) return;
+            
+            const sessionDate = booking.sessionDate.toDate();
+            const dateStr = sessionDate.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            alert(`
+Booking Details
+===============
+
+Subject: ${booking.subject}
+Date: ${dateStr}
+Time: ${formatTime(booking.sessionTime)}
+Duration: ${booking.duration} hours
+
+Teacher: ${booking.teacher.firstName} ${booking.teacher.lastName}
+Email: ${booking.teacher.email}
+
+Parent: ${booking.parent.firstName} ${booking.parent.lastName}
+Email: ${booking.parent.email}
+
+Child: ${booking.child.firstName} ${booking.child.lastName || ''}
+School: ${booking.child.currentSchool || 'Not specified'}
+
+Amount: ${formatCurrency(booking.totalAmount)}
+Status: ${booking.status}
+
+${booking.notes ? `Notes: ${booking.notes}` : ''}
+            `);
+        }
+        
+        // Populate user name
+        if (window.userData) {
+            document.getElementById('userName').textContent = window.userData.firstName || 'Admin';
+        }
+    </script>
+</body>
+</html>

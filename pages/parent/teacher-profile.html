@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Profile - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="children.html" class="nav-link">My Children</a>
+                <a href="search.html" class="nav-link">Find Teacher</a>
+                <a href="bookings.html" class="nav-link">Bookings</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Profile Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div id="profileContent">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading teacher profile...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Book a Session</h3>
+                <button class="modal-close" onclick="closeModal('bookingModal')">&times;</button>
+            </div>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="selectChild">Select Child <span style="color: var(--error-color);">*</span></label>
+                    <select id="selectChild" required>
+                        <option value="">Choose a child</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="selectSubject">Subject <span style="color: var(--error-color);">*</span></label>
+                    <select id="selectSubject" required>
+                        <option value="">Choose a subject</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sessionDate">Session Date <span style="color: var(--error-color);">*</span></label>
+                    <input type="date" id="sessionDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sessionTime">Session Time <span style="color: var(--error-color);">*</span></label>
+                    <select id="sessionTime" required>
+                        <option value="">Choose a time</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sessionDuration">Duration (hours) <span style="color: var(--error-color);">*</span></label>
+                    <select id="sessionDuration" required>
+                        <option value="1">1 hour</option>
+                        <option value="1.5">1.5 hours</option>
+                        <option value="2">2 hours</option>
+                        <option value="2.5">2.5 hours</option>
+                        <option value="3">3 hours</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bookingNotes">Additional Notes (Optional)</label>
+                    <textarea id="bookingNotes" rows="3" placeholder="Any specific topics or areas to focus on..."></textarea>
+                </div>
+                
+                <div class="booking-summary" style="padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                    <h4 style="margin-bottom: 0.5rem;">Booking Summary</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Hourly Rate:</span>
+                        <span id="summaryRate">GHS 0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Duration:</span>
+                        <span id="summaryDuration">0 hours</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; padding-top: 0.5rem; border-top: 1px solid var(--border-color);">
+                        <span>Total:</span>
+                        <span id="summaryTotal">GHS 0</span>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitBookingBtn">
+                        <i class="fas fa-check"></i> Confirm Booking
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('bookingModal')">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/parent.js"></script>
+    
+    <script>
+        let currentTeacher = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const teacherId = urlParams.get('id');
+            
+            if (teacherId) {
+                loadTeacherProfile(teacherId);
+            } else {
+                window.location.href = 'search.html';
+            }
+            
+            initBookingForm();
+        });
+        
+        async function loadTeacherProfile(teacherId) {
+            try {
+                const teacherDoc = await firebaseDB.collection('teachers').doc(teacherId).get();
+                
+                if (!teacherDoc.exists) {
+                    showFlashMessage('Teacher not found', 'error');
+                    window.location.href = 'search.html';
+                    return;
+                }
+                
+                currentTeacher = { id: teacherDoc.id, ...teacherDoc.data() };
+                
+                // Get user info
+                const userDoc = await firebaseDB.collection('users').doc(currentTeacher.userId).get();
+                currentTeacher.user = userDoc.data();
+                
+                // Get reviews
+                const reviewsSnapshot = await firebaseDB.collection('reviews')
+                    .where('teacherId', '==', teacherId)
+                    .orderBy('createdAt', 'desc')
+                    .limit(5)
+                    .get();
+                
+                const reviews = [];
+                for (const doc of reviewsSnapshot.docs) {
+                    const review = { id: doc.id, ...doc.data() };
+                    const parentDoc = await firebaseDB.collection('users').doc(review.parentId).get();
+                    review.parent = parentDoc.data();
+                    reviews.push(review);
+                }
+                
+                currentTeacher.reviews = reviews;
+                
+                renderProfile();
+                
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showFlashMessage('Error loading teacher profile', 'error');
+            }
+        }
+        
+        function renderProfile() {
+            const container = document.getElementById('profileContent');
+            const teacher = currentTeacher;
+            const rating = teacher.rating || 0;
+            const stars = '★'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
+            
+            container.innerHTML = `
+                <a href="search.html" class="btn btn-outline" style="margin-bottom: 1rem;">
+                    <i class="fas fa-arrow-left"></i> Back to Search
+                </a>
+                
+                <div class="profile-header-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            ${teacher.profilePhoto ? 
+                                `<img src="${teacher.profilePhoto}" alt="${teacher.user.firstName}">` : 
+                                `<div class="avatar-placeholder">${(teacher.user.firstName[0] + teacher.user.lastName[0]).toUpperCase()}</div>`
+                            }
+                        </div>
+                        <div class="profile-info">
+                            <h2>${teacher.user.firstName} ${teacher.user.lastName}</h2>
+                            <div class="profile-rating">
+                                <span class="stars">${stars}</span>
+                                <span class="rating-value">${rating.toFixed(1)}</span>
+                                <span class="review-count">(${teacher.totalReviews || 0} reviews)</span>
+                            </div>
+                            <div class="profile-badges">
+                                ${teacher.verificationStatus === 'verified' ? '<span class="badge badge-success"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+                                <span class="badge badge-info"><i class="fas fa-briefcase"></i> ${teacher.experienceYears || 0} years exp.</span>
+                            </div>
+                        </div>
+                        <div class="profile-price">
+                            <div class="price-amount">${formatCurrency(teacher.hourlyRate)}</div>
+                            <div class="price-label">per hour</div>
+                            <button class="btn btn-primary btn-large" onclick="openBookingModal()">
+                                <i class="fas fa-calendar-plus"></i> Book Session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-grid">
+                    <div class="profile-main">
+                        <div class="dashboard-section">
+                            <h3>About</h3>
+                            <p>${teacher.bio || 'No bio available'}</p>
+                        </div>
+                        
+                        <div class="dashboard-section">
+                            <h3>Qualifications</h3>
+                            <p><strong>${teacher.qualification || 'Not specified'}</strong></p>
+                        </div>
+                        
+                        <div class="dashboard-section">
+                            <h3>Subjects</h3>
+                            <div class="tags-grid">
+                                ${teacher.subjects ? teacher.subjects.map(s => `<span class="tag">${s}</span>`).join('') : '<p>No subjects specified</p>'}
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-section">
+                            <h3>Curricula</h3>
+                            <div class="tags-grid">
+                                ${teacher.curricula ? teacher.curricula.map(c => `<span class="tag">${c}</span>`).join('') : '<p>No curricula specified</p>'}
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-section">
+                            <h3>School Levels</h3>
+                            <div class="tags-grid">
+                                ${teacher.schoolLevels ? teacher.schoolLevels.map(l => `<span class="tag">${l}</span>`).join('') : '<p>No levels specified</p>'}
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-section">
+                            <h3>Recent Reviews</h3>
+                            ${teacher.reviews.length > 0 ? teacher.reviews.map(review => {
+                                const reviewStars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                                const date = review.createdAt.toDate().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+                                
+                                return `
+                                    <div class="review-card">
+                                        <div class="review-header">
+                                            <div>
+                                                <strong>${review.parent.firstName} ${review.parent.lastName}</strong>
+                                                <div class="review-stars">${reviewStars}</div>
+                                            </div>
+                                            <span class="review-date">${date}</span>
+                                        </div>
+                                        <p class="review-text">${review.comment}</p>
+                                    </div>
+                                `;
+                            }).join('') : '<p>No reviews yet</p>'}
+                        </div>
+                    </div>
+                    
+                    <div class="profile-sidebar">
+                        <div class="dashboard-section">
+                            <h3>Location</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> ${teacher.location.city}${teacher.location.area ? ', ' + teacher.location.area : ''}</p>
+                        </div>
+                        
+                        <div class="dashboard-section">
+                            <h3>Availability</h3>
+                            ${teacher.availability && teacher.availability.length > 0 ? 
+                                teacher.availability.map(a => `
+                                    <div class="availability-day">
+                                        <strong>${a.dayName}</strong>
+                                        <div>${a.times.map(t => formatTime(t)).join(', ')}</div>
+                                    </div>
+                                `).join('') : 
+                                '<p>Not specified</p>'
+                            }
+                        </div>
+                        
+                        <div class="dashboard-section">
+                            <h3>Statistics</h3>
+                            <div class="stat-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>${teacher.totalSessions || 0}</strong> sessions completed</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-star"></i>
+                                <span><strong>${rating.toFixed(1)}</strong> average rating</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-users"></i>
+                                <span><strong>${teacher.totalReviews || 0}</strong> reviews</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function openBookingModal() {
+            if (!window.currentUser) {
+                showFlashMessage('Please login to book a session', 'error');
+                window.location.href = '../../login.html';
+                return;
+            }
+            
+            // Load children
+            const childrenSnapshot = await firebaseDB.collection('children')
+                .where('parentId', '==', window.currentUser.uid)
+                .get();
+            
+            const selectChild = document.getElementById('selectChild');
+            selectChild.innerHTML = '<option value="">Choose a child</option>';
+            
+            childrenSnapshot.forEach(doc => {
+                const child = doc.data();
+                selectChild.innerHTML += `<option value="${doc.id}">${child.firstName} ${child.lastName || ''}</option>`;
+            });
+            
+            if (childrenSnapshot.empty) {
+                showFlashMessage('Please add a child profile first', 'warning');
+                window.location.href = 'children.html';
+                return;
+            }
+            
+            // Load subjects
+            const selectSubject = document.getElementById('selectSubject');
+            selectSubject.innerHTML = '<option value="">Choose a subject</option>';
+            
+            if (currentTeacher.subjects) {
+                currentTeacher.subjects.forEach(subject => {
+                    selectSubject.innerHTML += `<option value="${subject}">${subject}</option>`;
+                });
+            }
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('sessionDate').min = today;
+            
+            // Update summary
+            document.getElementById('summaryRate').textContent = formatCurrency(currentTeacher.hourlyRate);
+            
+            document.getElementById('bookingModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function initBookingForm() {
+            const durationSelect = document.getElementById('sessionDuration');
+            const timeSelect = document.getElementById('sessionTime');
+            const dateInput = document.getElementById('sessionDate');
+            
+            if (durationSelect) {
+                durationSelect.addEventListener('change', updateBookingSummary);
+            }
+            
+            if (timeSelect) {
+                timeSelect.addEventListener('change', updateBookingSummary);
+            }
+            
+            if (dateInput) {
+                dateInput.addEventListener('change', updateTimeSlots);
+            }
+            
+            const form = document.getElementById('bookingForm');
+            if (form) {
+                form.addEventListener('submit', handleBookingSubmit);
+            }
+        }
+        
+        function updateTimeSlots() {
+            const selectedDate = document.getElementById('sessionDate').value;
+            const timeSelect = document.getElementById('sessionTime');
+            
+            if (!selectedDate || !currentTeacher.availability) {
+                timeSelect.innerHTML = '<option value="">Choose a time</option>';
+                return;
+            }
+            
+            const date = new Date(selectedDate);
+            const dayOfWeek = date.getDay();
+            
+            const dayAvailability = currentTeacher.availability.find(a => a.day === dayOfWeek);
+            
+            timeSelect.innerHTML = '<option value="">Choose a time</option>';
+            
+            if (dayAvailability && dayAvailability.times) {
+                dayAvailability.times.forEach(time => {
+                    timeSelect.innerHTML += `<option value="${time}">${formatTime(time)}</option>`;
+                });
+            } else {
+                timeSelect.innerHTML = '<option value="">No availability on this day</option>';
+            }
+        }
+        
+        function updateBookingSummary() {
+            const duration = parseFloat(document.getElementById('sessionDuration').value) || 0;
+            const total = currentTeacher.hourlyRate * duration;
+            
+            document.getElementById('summaryDuration').textContent = duration + ' hour' + (duration !== 1 ? 's' : '');
+            document.getElementById('summaryTotal').textContent = formatCurrency(total);
+        }
+        
+        async function handleBookingSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBookingBtn');
+            const resetLoading = showLoading(submitBtn);
+            
+            try {
+                const childId = document.getElementById('selectChild').value;
+                const subject = document.getElementById('selectSubject').value;
+                const sessionDate = document.getElementById('sessionDate').value;
+                const sessionTime = document.getElementById('sessionTime').value;
+                const duration = parseFloat(document.getElementById('sessionDuration').value);
+                const notes = document.getElementById('bookingNotes').value.trim();
+                
+                if (!childId || !subject || !sessionDate || !sessionTime) {
+                    throw new Error('Please fill in all required fields');
+                }
+                
+                const totalAmount = currentTeacher.hourlyRate * duration;
+                
+                const bookingData = {
+                    teacherId: currentTeacher.id,
+                    parentId: window.currentUser.uid,
+                    childId: childId,
+                    subject: subject,
+                    sessionDate: new Date(sessionDate),
+                    sessionTime: sessionTime,
+                    duration: duration,
+                    hourlyRate: currentTeacher.hourlyRate,
+                    totalAmount: totalAmount,
+                    status: 'pending',
+                    notes: notes,
+                    paymentStatus: 'unpaid',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await firebaseDB.collection('bookings').add(bookingData);
+                
+                showFlashMessage('Booking request sent! The teacher will confirm shortly.', 'success');
+                closeModal('bookingModal');
+                
+                setTimeout(() => {
+                    window.location.href = 'bookings.html';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                showFlashMessage(error.message, 'error');
+            } finally {
+                resetLoading();
+            }
+        }
+        
+        // Populate user name
+        if (window.userData) {
+            document.getElementById('userName').textContent = window.userData.firstName || 'Parent';
+        }
+    </script>
+    
+    <style>
+        .profile-header-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .profile-header {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 2rem;
+            align-items: start;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        
+        .profile-info h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .stars {
+            color: #FFC107;
+        }
+        
+        .rating-value {
+            font-weight: 700;
+        }
+        
+        .review-count {
+            color: var(--text-secondary);
+        }
+        
+        .profile-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .badge-success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .badge-info {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+        
+        .profile-price {
+            text-align: right;
+        }
+        
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .price-label {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .profile-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .tags-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .tag {
+            padding: 0.5rem 1rem;
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--primary-color);
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+        }
+        
+        .availability-day {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+        }
+        
+        .availability-day strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-item i {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+        
+        .review-card {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .review-stars {
+            color: #FFC107;
+            margin-top: 0.25rem;
+        }
+        
+        .review-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .review-text {
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-header {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin: 0 auto;
+            }
+            
+            .profile-price {
+                text-align: center;
+            }
+            
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

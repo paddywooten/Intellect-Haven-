@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    
+    <style>
+        .bookings-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .booking-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .booking-card.pending {
+            border-left-color: #FF9800;
+        }
+        
+        .booking-card.confirmed {
+            border-left-color: #4CAF50;
+        }
+        
+        .booking-card.completed {
+            border-left-color: #2196F3;
+        }
+        
+        .booking-card.cancelled {
+            border-left-color: #F44336;
+            opacity: 0.7;
+        }
+        
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .booking-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .booking-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .booking-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .booking-status {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .booking-status.pending {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+        
+        .booking-status.confirmed {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .booking-status.completed {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+        
+        .booking-status.cancelled {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+        
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .booking-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .session-notes-section {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+        }
+        
+        .session-notes-section h5 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="bookings.html" class="nav-link active">Bookings</a>
+                <a href="availability.html" class="nav-link">Availability</a>
+                <div class="nav-user">
+                    <span id="userName">Loading...</span>
+                    <button class="btn btn-outline btn-small" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Bookings Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h2>My Bookings</h2>
+                    <p>Manage your tutoring sessions</p>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="bookings-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="pending">Pending</button>
+                <button class="filter-btn" data-filter="confirmed">Confirmed</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+            </div>
+
+            <!-- Bookings List -->
+            <div id="bookingsList">
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading bookings...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Notes Modal -->
+    <div class="modal" id="sessionNotesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Session Notes</h3>
+                <button class="modal-close" onclick="closeModal('sessionNotesModal')">&times;</button>
+            </div>
+            <form id="sessionNotesForm">
+                <input type="hidden" id="bookingId">
+                
+                <div class="form-group">
+                    <label for="lessonTopic">Lesson Topic <span style="color: var(--error-color);">*</span></label>
+                    <input type="text" id="lessonTopic" required placeholder="e.g., Algebra - Linear Equations">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lessonNotes">What was covered <span style="color: var(--error-color);">*</span></label>
+                    <textarea id="lessonNotes" rows="4" required placeholder="Describe what was taught during the session..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="homework">Homework Assigned</label>
+                    <textarea id="homework" rows="3" placeholder="List any homework or practice exercises..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="progressNotes">Student Progress</label>
+                    <textarea id="progressNotes" rows="3" placeholder="How did the student perform? Areas of strength and improvement..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitNotesBtn">
+                        <i class="fas fa-save"></i> Save & Complete Session
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('sessionNotesModal')">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="../../config/firebase-config.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/teacher.js"></script>
+    
+    <script>
+        let allBookings = [];
+        let currentFilter = 'all';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!requireUserType(['teacher'])) return;
+            
+            document.getElementById('userName').textContent = window.userData.firstName;
+            loadBookings();
+            initFilters();
+            initSessionNotesForm();
+        });
+        
+        function initFilters() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderBookings();
+                });
+            });
+        }
+        
+        async function loadBookings() {
+            try {
+                const snapshot = await firebaseDB.collection('bookings')
+                    .where('teacherId', '==', window.currentUser.uid)
+                    .orderBy('sessionDate', 'desc')
+                    .get();
+                
+                allBookings = [];
+                
+                for (const doc of snapshot.docs) {
+                    const booking = { id: doc.id, ...doc.data() };
+                    
+                    // Get parent and child info
+                    const parentDoc = await firebaseDB.collection('users').doc(booking.parentId).get();
+                    const childDoc = await firebaseDB.collection('children').doc(booking.childId).get();
+                    
+                    booking.parent = parentDoc.data();
+                    booking.child = childDoc.data();
+                    
+                    // Get session notes if exists
+                    const sessionSnapshot = await firebaseDB.collection('sessions')
+                        .where('bookingId', '==', doc.id)
+                        .get();
+                    
+                    if (!sessionSnapshot.empty) {
+                        booking.session = sessionSnapshot.docs[0].data();
+                    }
+                    
+                    allBookings.push(booking);
+                }
+                
+                renderBookings();
+                
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                document.getElementById('bookingsList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Error loading bookings</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderBookings() {
+            const container = document.getElementById('bookingsList');
+            
+            let filtered = allBookings;
+            if (currentFilter !== 'all') {
+                filtered = allBookings.filter(b => b.status === currentFilter);
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <p>No ${currentFilter === 'all' ? '' : currentFilter} bookings found</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filtered.map(booking => {
+                const sessionDate = booking.sessionDate.toDate();
+                const dateStr = sessionDate.toLocaleDateString('en-GB', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                const isPast = sessionDate < new Date();
+                const canAddNotes = booking.status === 'confirmed' && isPast && !booking.session;
+                
+                let actions = '';
+                
+                if (booking.status === 'pending') {
+                    actions = `
+                        <button class="btn btn-primary btn-small" onclick="confirmBooking('${booking.id}')">
+                            <i class="fas fa-check"></i> Confirm
+                        </button>
+                        <button class="btn btn-outline btn-small" onclick="declineBooking('${booking.id}')">
+                            <i class="fas fa-times"></i> Decline
+                        </button>
+                    `;
+                } else if (canAddNotes) {
+                    actions = `
+                        <button class="btn btn-primary btn-small" onclick="openSessionNotesModal('${booking.id}')">
+                            <i class="fas fa-edit"></i> Add Session Notes
+                        </button>
+                    `;
+                } else if (booking.status === 'confirmed' && !isPast) {
+                    actions = `
+                        <button class="btn btn-outline btn-small" onclick="cancelBooking('${booking.id}')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    `;
+                }
+                
+                let sessionNotesHTML = '';
+                if (booking.session) {
+                    sessionNotesHTML = `
+                        <div class="session-notes-section">
+                            <h5><i class="fas fa-file-alt"></i> Session Notes</h5>
+                            <p><strong>Topic:</strong> ${booking.session.lessonTopic}</p>
+                            <p><strong>Covered:</strong> ${booking.session.lessonNotes}</p>
+                            ${booking.session.homework ? `<p><strong>Homework:</strong> ${booking.session.homework}</p>` : ''}
+                            ${booking.session.progressNotes ? `<p><strong>Progress:</strong> ${booking.session.progressNotes}</p>` : ''}
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="booking-card ${booking.status}">
+                        <div class="booking-header">
+                            <div class="booking-info">
+                                <h4>${booking.subject}</h4>
+                                <div class="booking-meta">
+                                    <span><i class="fas fa-child"></i> ${booking.child.firstName} ${booking.child.lastName || ''}</span>
+                                    <span><i class="fas fa-user"></i> ${booking.parent.firstName} ${booking.parent.lastName}</span>
+                                </div>
+                            </div>
+                            <div class="booking-status ${booking.status}">
+                                ${booking.status}
+                            </div>
+                        </div>
+                        
+                        <div class="booking-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Date</span>
+                                <span class="detail-value">${dateStr}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Time</span>
+                                <span class="detail-value">${formatTime(booking.sessionTime)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Duration</span>
+                                <span class="detail-value">${booking.duration} hour${booking.duration > 1 ? 's' : ''}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Amount</span>
+                                <span class="detail-value">${formatCurrency(booking.totalAmount)}</span>
+                            </div>
+                        </div>
+                        
+                        ${booking.notes ? `
+                            <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-sm);">
+                                <strong>Parent Notes:</strong> ${booking.notes}
+                            </div>
+                        ` : ''}
+                        
+                        ${sessionNotesHTML}
+                        
+                        ${actions ? `<div class="booking-actions">${actions}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        async function confirmBooking(bookingId) {
+            if (!confirm('Confirm this booking?')) return;
+            
+            try {
+                await firebaseDB.collection('bookings').doc(bookingId).update({
+                    status: 'confirmed',
+                    confirmedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showFlashMessage('Booking confirmed!', 'success');
+                loadBookings();
+                
+            } catch (error) {
+                console.error('Error confirming booking:', error);
+                showFlashMessage('Error confirming booking', 'error');
+            }
+        }
+        
+        async function declineBooking(bookingId) {
+            const reason = prompt('Reason for declining (optional):');
+            
+            try {
+                await firebaseDB.collection('bookings').doc(bookingId).update({
+                    status: 'cancelled',
+                    cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    cancellationReason: reason || 'Declined by teacher',
+                    cancelledBy: 'teacher'
+                });
+                
+                showFlashMessage('Booking declined', 'success');
+                loadBookings();
+                
+            } catch (error) {
+                console.error('Error declining booking:', error);
+                showFlashMessage('Error declining booking', 'error');
+            }
+        }
+        
+        async function cancelBooking(bookingId) {
+            if (!confirm('Cancel this booking? The parent will be notified.')) return;
+            
+            const reason = prompt('Reason for cancellation:');
+            if (!reason) return;
+            
+            try {
+                await firebaseDB.collection('bookings').doc(bookingId).update({
+                    status: 'cancelled',
+                    cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    cancellationReason: reason,
+                    cancelledBy: 'teacher'
+                });
+                
+                showFlashMessage('Booking cancelled', 'success');
+                loadBookings();
+                
+            } catch (error) {
+                console.error('Error cancelling booking:', error);
+                showFlashMessage('Error cancelling booking', 'error');
+            }
+        }
+        
+        function openSessionNotesModal(bookingId) {
+            document.getElementById('bookingId').value = bookingId;
+            document.getElementById('sessionNotesForm').reset();
+            document.getElementById('sessionNotesModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function initSessionNotesForm() {
+            const form = document.getElementById('sessionNotesForm');
+            if (form) {
+                form.addEventListener('submit', handleSessionNotesSubmit);
+            }
+        }
+        
+        async function handleSessionNotesSubmit(e) {
+            e.preventDefault();
+            
+            const bookingId = document.getElementById('bookingId').value;
+            const lessonTopic = document.getElementById('lessonTopic').value.trim();
+            const lessonNotes = document.getElementById('lessonNotes').value.trim();
+            const homework = document.getElementById('homework').value.trim();
+            const progressNotes = document.getElementById('progressNotes').value.trim();
+            
+            const submitBtn = document.getElementById('submitNotesBtn');
+            const resetLoading = showLoading(submitBtn);
+            
+            try {
+                // Create session record
+                await firebaseDB.collection('sessions').add({
+                    bookingId: bookingId,
+                    teacherId: window.currentUser.uid,
+                    lessonTopic: lessonTopic,
+                    lessonNotes: lessonNotes,
+                    homework: homework,
+                    progressNotes: progressNotes,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Update booking status
+                await firebaseDB.collection('bookings').doc(bookingId).update({
+                    status: 'completed',
+                    completedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                closeModal('sessionNotesModal');
+                showFlashMessage('Session completed successfully!', 'success');
+                loadBookings();
+                
+            } catch (error) {
+                console.error('Error saving session notes:', error);
+                showFlashMessage('Error saving session notes', 'error');
+            } finally {
+                resetLoading();
+            }
+        }
+    </script>
+</body>
+</html>

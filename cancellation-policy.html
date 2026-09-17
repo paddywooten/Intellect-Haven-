@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cancellation Policy - Intellect Haven">
+    <title>Cancellation Policy - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <style>
+        .policy-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .policy-section {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .policy-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .policy-section h3 {
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .policy-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .policy-section ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .policy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .policy-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .policy-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        
+        .policy-table tr:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .policy-highlight {
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(76, 175, 80, 0.1) 100%);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary-color);
+            margin: 1.5rem 0;
+        }
+        
+        .policy-highlight h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .policy-highlight p {
+            margin-bottom: 0;
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="find-teacher.html" class="nav-link">Find a Teacher</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="login.html" class="btn btn-outline">Login</a>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Policy Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="policy-container">
+                <div class="dashboard-header">
+                    <div class="welcome-message">
+                        <h2>Cancellation Policy</h2>
+                        <p>Understanding our cancellation and refund policies</p>
+                    </div>
+                </div>
+
+                <!-- Overview -->
+                <div class="policy-section">
+                    <h2><i class="fas fa-info-circle"></i> Overview</h2>
+                    <p>At Intellect Haven, we understand that circumstances can change. Our cancellation policy is designed to be fair to both parents and teachers while ensuring the platform runs smoothly.</p>
+                    
+                    <div class="policy-highlight">
+                        <h4><i class="fas fa-lightbulb"></i> Key Points</h4>
+                        <p>Free cancellation is available more than 24 hours before the session. Partial refunds are available 12-24 hours before. No refunds for cancellations less than 12 hours before or no-shows.</p>
+                    </div>
+                </div>
+
+                <!-- For Parents -->
+                <div class="policy-section">
+                    <h2><i class="fas fa-user-friends"></i> Cancellation Policy for Parents</h2>
+                    
+                    <h3>Cancellation by Parents</h3>
+                    <p>If you need to cancel a booking, please do so as early as possible to allow teachers to fill the time slot.</p>
+                    
+                    <table class="policy-table">
+                        <thead>
+                            <tr>
+                                <th>Cancellation Time</th>
+                                <th>Refund Policy</th>
+                                <th>Teacher Compensation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>More than 24 hours before session</strong></td>
+                                <td>Full refund to parent</td>
+                                <td>No payment to teacher</td>
+                            </tr>
+                            <tr>
+                                <td><strong>12-24 hours before session</strong></td>
+                                <td>50% refund to parent</td>
+                                <td>Teacher receives 50% of booking fee</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Less than 12 hours before session</strong></td>
+                                <td>No refund</td>
+                                <td>Teacher receives full payment</td>
+                            </tr>
+                            <tr>
+                                <td><strong>No-show (parent doesn't attend)</strong></td>
+                                <td>No refund</td>
+                                <td>Teacher receives full payment</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>How to Cancel</h3>
+                    <ul>
+                        <li>Go to "My Bookings" in your dashboard</li>
+                        <li>Find the booking you want to cancel</li>
+                        <li>Click "Cancel Booking"</li>
+                        <li>Confirm the cancellation</li>
+                        <li>You'll receive a confirmation email</li>
+                    </ul>
+                    
+                    <h3>Rescheduling</h3>
+                    <p>Instead of cancelling, you can also request to reschedule:</p>
+                    <ul>
+                        <li>Contact the teacher directly through the platform</li>
+                        <li>Agree on a new date and time</li>
+                        <li>Cancel the original booking (subject to cancellation policy)</li>
+                        <li>Create a new booking for the new time</li>
+                    </ul>
+                </div>
+
+                <!-- For Teachers -->
+                <div class="policy-section">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> Cancellation Policy for Teachers</h2>
+                    
+                    <h3>Cancellation by Teachers</h3>
+                    <p>We understand that emergencies happen. However, frequent cancellations by teachers can damage trust and reputation on the platform.</p>
+                    
+                    <table class="policy-table">
+                        <thead>
+                            <tr>
+                                <th>Cancellation Time</th>
+                                <th>Parent Refund</th>
+                                <th>Teacher Penalty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>More than 48 hours before session</strong></td>
+                                <td>Full refund to parent</td>
+                                <td>No penalty</td>
+                            </tr>
+                            <tr>
+                                <td><strong>24-48 hours before session</strong></td>
+                                <td>Full refund to parent</td>
+                                <td>Warning issued</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Less than 24 hours before session</strong></td>
+                                <td>Full refund + 10% credit to parent</td>
+                                <td>Account review + potential suspension</td>
+                            </tr>
+                            <tr>
+                                <td><strong>No-show (teacher doesn't attend)</strong></td>
+                                <td>Full refund + 25% credit to parent</td>
+                                <td>Immediate account suspension</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="policy-highlight">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Important</h4>
+                        <p>Teachers who cancel frequently (3+ times in 30 days) may have their accounts suspended or permanently removed from the platform.</p>
+                    </div>
+                    
+                    <h3>Emergency Situations</h3>
+                    <p>If you have an emergency and need to cancel last-minute:</p>
+                    <ul>
+                        <li>Contact the parent immediately through the platform</li>
+                        <li>Contact Intellect Haven support at support@intellecthaven.com</li>
+                        <li>Provide documentation if possible (medical certificate, etc.)</li>
+                        <li>Offer to reschedule at the parent's convenience</li>
+                    </ul>
+                </div>
+
+                <!-- Refund Process -->
+                <div class="policy-section">
+                    <h2><i class="fas fa-money-bill-wave"></i> Refund Process</h2>
+                    
+                    <h3>How Refunds Work</h3>
+                    <ul>
+                        <li>Refunds are processed automatically based on the cancellation timing</li>
+                        <li>Refunds are issued to the original payment method</li>
+                        <li>Mobile Money refunds: Processed within 24 hours</li>
+                        <li>Card refunds: May take 5-10 business days depending on your bank</li>
+                    </ul>
+                    
+                    <h3>Refund Timeline</h3>
+                    <table class="policy-table">
+                        <thead>
+                            <tr>
+                                <th>Payment Method</th>
+                                <th>Processing Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mobile Money (MTN, Vodafone, AirtelTigo)</td>
+                                <td>Within 24 hours</td>
+                            </tr>
+                            <tr>
+                                <td>Credit/Debit Cards</td>
+                                <td>5-10 business days</td>
+                            </tr>
+                            <tr>
+                                <td>Bank Transfer</td>
+                                <td>3-5 business days</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Disputes -->
+                <div class="policy-section">
+                    <h2><i class="fas fa-gavel"></i> Dispute Resolution</h2>
+                    
+                    <h3>If You Disagree with a Cancellation Decision</h3>
+                    <p>If you believe a cancellation was handled incorrectly:</p>
+                    <ul>
+                        <li>Contact our support team within 7 days of the cancellation</li>
+                        <li>Provide your booking ID and details of the issue</li>
+                        <li>Include any relevant evidence (screenshots, messages, etc.)</li>
+                        <li>Our team will review the case within 48 hours</li>
+                        <li>We'll make a final decision based on the evidence</li>
+                    </ul>
+                    
+                    <h3>Mediation Process</h3>
+                    <p>For disputes between parents and teachers:</p>
+                    <ul>
+                        <li>Both parties will be contacted for their perspective</li>
+                        <li>Session notes and platform messages will be reviewed</li>
+                        <li>A neutral mediator will make a fair decision</li>
+                        <li>Decisions are final and binding</li>
+                    </ul>
+                </div>
+
+                <!-- Special Circumstances -->
+                <div class="policy-section">
+                    <h2><i class="fas fa-star"></i> Special Circumstances</h2>
+                    
+                    <h3>Force Majeure</h3>
+                    <p>In cases of extraordinary circumstances beyond anyone's control (natural disasters, government restrictions, etc.):</p>
+                    <ul>
+                        <li>Full refunds will be issued to parents</li>
+                        <li>Teachers will not be penalized</li>
+                        <li>Bookings can be rescheduled at no cost</li>
+                    </ul>
+                    
+                    <h3>Technical Issues</h3>
+                    <p>If platform technical issues prevent a session from occurring:</p>
+                    <ul>
+                        <li>Full refunds will be issued to parents</li>
+                        <li>Teachers will receive compensation for their time</li>
+                        <li>Sessions can be rescheduled at no cost</li>
+                    </ul>
+                    
+                    <h3>Quality Issues</h3>
+                    <p>If a parent is dissatisfied with the quality of tutoring:</p>
+                    <ul>
+                        <li>Contact support within 24 hours of the session</li>
+                        <li>Provide specific details about the quality concerns</li>
+                        <li>Our team will investigate and may issue partial or full refunds</li>
+                        <li>Teachers may receive warnings or account reviews</li>
+                    </ul>
+                </div>
+
+                <!-- Policy Updates -->
+                <div class="policy-section">
+                    <h2><i class="fas fa-sync-alt"></i> Policy Updates</h2>
+                    <p>Intellect Haven reserves the right to update this cancellation policy at any time. Changes will be:</p>
+                    <ul>
+                        <li>Communicated via email to all users</li>
+                        <li>Posted on our website with an updated date</li>
+                        <li>Effective 30 days after notification</li>
+                    </ul>
+                    <p>Continued use of the platform after policy changes constitutes acceptance of the new policy.</p>
+                </div>
+
+                <!-- Contact -->
+                <div class="policy-section" style="text-align: center;">
+                    <h2><i class="fas fa-question-circle"></i> Questions?</h2>
+                    <p>If you have any questions about our cancellation policy, please don't hesitate to contact us.</p>
+                    <a href="contact.html" class="btn btn-primary btn-large" style="margin-top: 1rem;">
+                        <i class="fas fa-envelope"></i> Contact Support
+                    </a>
+                </div>
+
+                <p class="last-updated">Last updated: January 2024</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart"></i> for African education</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

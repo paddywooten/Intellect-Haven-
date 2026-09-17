@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Terms and Conditions - Intellect Haven">
+    <title>Terms and Conditions - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <style>
+        .terms-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .terms-section {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .terms-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .terms-section h3 {
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .terms-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .terms-section ul, .terms-section ol {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .terms-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .terms-highlight {
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(76, 175, 80, 0.1) 100%);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary-color);
+            margin: 1.5rem 0;
+        }
+        
+        .terms-highlight h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .terms-highlight p {
+            margin-bottom: 0;
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+        
+        .toc {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 2rem;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .toc ol {
+            margin-left: 1rem;
+        }
+        
+        .toc a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="find-teacher.html" class="nav-link">Find a Teacher</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="login.html" class="btn btn-outline">Login</a>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Terms Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="terms-container">
+                <div class="dashboard-header">
+                    <div class="welcome-message">
+                        <h2>Terms and Conditions</h2>
+                        <p>Please read these terms carefully before using Intellect Haven</p>
+                    </div>
+                </div>
+
+                <!-- Table of Contents -->
+                <div class="toc">
+                    <h3><i class="fas fa-list"></i> Table of Contents</h3>
+                    <ol>
+                        <li><a href="#acceptance">Acceptance of Terms</a></li>
+                        <li><a href="#eligibility">Eligibility</a></li>
+                        <li><a href="#accounts">User Accounts</a></li>
+                        <li><a href="#services">Platform Services</a></li>
+                        <li><a href="#teachers">Teacher Responsibilities</a></li>
+                        <li><a href="#parents">Parent Responsibilities</a></li>
+                        <li><a href="#payments">Payments and Fees</a></li>
+                        <li><a href="#cancellations">Cancellations and Refunds</a></li>
+                        <li><a href="#conduct">User Conduct</a></li>
+                        <li><a href="#intellectual-property">Intellectual Property</a></li>
+                        <li><a href="#privacy">Privacy and Data Protection</a></li>
+                        <li><a href="#liability">Limitation of Liability</a></li>
+                        <li><a href="#termination">Termination</a></li>
+                        <li><a href="#changes">Changes to Terms</a></li>
+                        <li><a href="#governing-law">Governing Law</a></li>
+                        <li><a href="#contact">Contact Information</a></li>
+                    </ol>
+                </div>
+
+                <!-- 1. Acceptance of Terms -->
+                <div class="terms-section" id="acceptance">
+                    <h2>1. Acceptance of Terms</h2>
+                    <p>By accessing or using Intellect Haven ("the Platform"), you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree to these Terms, you may not use the Platform.</p>
+                    <p>These Terms constitute a legally binding agreement between you ("User," "you," or "your") and Intellect Haven ("we," "us," or "our").</p>
+                    
+                    <div class="terms-highlight">
+                        <h4><i class="fas fa-exclamation-circle"></i> Important</h4>
+                        <p>By creating an account or using our services, you confirm that you have read, understood, and agree to be bound by these Terms and our Privacy Policy.</p>
+                    </div>
+                </div>
+
+                <!-- 2. Eligibility -->
+                <div class="terms-section" id="eligibility">
+                    <h2>2. Eligibility</h2>
+                    <p>To use Intellect Haven, you must:</p>
+                    <ul>
+                        <li>Be at least 18 years of age</li>
+                        <li>Have the legal capacity to enter into binding contracts</li>
+                        <li>Be a resident of Ghana or have authorization to use the Platform</li>
+                        <li>Not have been previously suspended or removed from the Platform</li>
+                        <li>Complete the registration process accurately and truthfully</li>
+                    </ul>
+                    <p>If you are using the Platform on behalf of a minor (as a parent or guardian), you represent that you have the legal authority to bind the minor to these Terms.</p>
+                </div>
+
+                <!-- 3. User Accounts -->
+                <div class="terms-section" id="accounts">
+                    <h2>3. User Accounts</h2>
+                    
+                    <h3>3.1 Registration</h3>
+                    <p>To access certain features, you must create an account. You agree to:</p>
+                    <ul>
+                        <li>Provide accurate, current, and complete information</li>
+                        <li>Maintain and promptly update your account information</li>
+                        <li>Maintain the security of your password</li>
+                        <li>Not share your account credentials with others</li>
+                        <li>Accept responsibility for all activities under your account</li>
+                    </ul>
+                    
+                    <h3>3.2 Account Types</h3>
+                    <p>We offer three types of accounts:</p>
+                    <ul>
+                        <li><strong>Parent Accounts:</strong> For parents or guardians seeking tutoring services for their children</li>
+                        <li><strong>Teacher Accounts:</strong> For qualified educators offering tutoring services</li>
+                        <li><strong>Admin Accounts:</strong> For Intellect Haven staff managing the Platform</li>
+                    </ul>
+                    
+                    <h3>3.3 Account Security</h3>
+                    <p>You are responsible for maintaining the confidentiality of your account credentials. Notify us immediately of any unauthorized use of your account.</p>
+                </div>
+
+                <!-- 4. Platform Services -->
+                <div class="terms-section" id="services">
+                    <h2>4. Platform Services</h2>
+                    <p>Intellect Haven provides a marketplace platform that connects parents with verified teachers for tutoring services. Our services include:</p>
+                    <ul>
+                        <li>Teacher search and discovery</li>
+                        <li>Booking and scheduling system</li>
+                        <li>Payment processing</li>
+                        <li>Session tracking and reporting</li>
+                        <li>Review and rating system</li>
+                        <li>Communication tools</li>
+                    </ul>
+                    
+                    <div class="terms-highlight">
+                        <h4><i class="fas fa-info-circle"></i> Platform Role</h4>
+                        <p>Intellect Haven is a marketplace platform that facilitates connections between parents and teachers. We are not a party to the tutoring agreements between users and do not provide tutoring services directly.</p>
+                    </div>
+                </div>
+
+                <!-- 5. Teacher Responsibilities -->
+                <div class="terms-section" id="teachers">
+                    <h2>5. Teacher Responsibilities</h2>
+                    <p>As a teacher on Intellect Haven, you agree to:</p>
+                    
+                    <h3>5.1 Verification</h3>
+                    <ul>
+                        <li>Complete the verification process truthfully</li>
+                        <li>Provide authentic documents (ID, qualifications, references)</li>
+                        <li>Maintain current and accurate profile information</li>
+                        <li>Notify us of any changes to your qualifications or status</li>
+                    </ul>
+                    
+                    <h3>5.2 Professional Conduct</h3>
+                    <ul>
+                        <li>Maintain professional behavior at all times</li>
+                        <li>Arrive on time for scheduled sessions</li>
+                        <li>Be prepared and deliver quality tutoring</li>
+                        <li>Submit session notes within 24 hours of each session</li>
+                        <li>Respond to parent communications within 24 hours</li>
+                    </ul>
+                    
+                    <h3>5.3 Child Safety</h3>
+                    <ul>
+                        <li>Prioritize child safety and well-being</li>
+                        <li>Maintain appropriate boundaries</li>
+                        <li>Report any concerns about child welfare immediately</li>
+                        <li>Comply with all safeguarding policies</li>
+                    </ul>
+                    
+                    <h3>5.4 Availability</h3>
+                    <ul>
+                        <li>Keep your availability calendar up to date</li>
+                        <li>Honor confirmed bookings</li>
+                        <li>Provide adequate notice for cancellations (per cancellation policy)</li>
+                    </ul>
+                </div>
+
+                <!-- 6. Parent Responsibilities -->
+                <div class="terms-section" id="parents">
+                    <h2>6. Parent Responsibilities</h2>
+                    <p>As a parent on Intellect Haven, you agree to:</p>
+                    
+                    <h3>6.1 Accurate Information</h3>
+                    <ul>
+                        <li>Provide accurate information about your children</li>
+                        <li>Disclose relevant learning needs or challenges</li>
+                        <li>Keep profile information current</li>
+                    </ul>
+                    
+                    <h3>6.2 Session Management</h3>
+                    <ul>
+                        <li>Ensure your child is available for scheduled sessions</li>
+                        <li>Provide a suitable learning environment</li>
+                        <li>Communicate any issues or concerns promptly</li>
+                        <li>Follow the cancellation policy</li>
+                    </ul>
+                    
+                    <h3>6.3 Payment</h3>
+                    <ul>
+                        <li>Pay for booked sessions as agreed</li>
+                        <li>Use only Platform-approved payment methods</li>
+                        <li>Not circumvent the Platform for payments</li>
+                    </ul>
+                    
+                    <h3>6.4 Respectful Communication</h3>
+                    <ul>
+                        <li>Treat teachers with respect and professionalism</li>
+                        <li>Provide honest and fair reviews</li>
+                        <li>Communicate concerns constructively</li>
+                    </ul>
+                </div>
+
+                <!-- 7. Payments and Fees -->
+                <div class="terms-section" id="payments">
+                    <h2>7. Payments and Fees</h2>
+                    
+                    <h3>7.1 Teacher Rates</h3>
+                    <p>Teachers set their own hourly rates. Rates are displayed on teacher profiles and confirmed at the time of booking.</p>
+                    
+                    <h3>7.2 Service Fees</h3>
+                    <p>Intellect Haven charges a 15% service fee on each booking. This fee is automatically deducted from the teacher's earnings.</p>
+                    
+                    <h3>7.3 Payment Processing</h3>
+                    <ul>
+                        <li>Parents pay at the time of booking</li>
+                        <li>Funds are held securely until session completion</li>
+                        <li>Teachers receive payment within 24 hours of session completion</li>
+                        <li>Payments are made via Mobile Money (MoMo)</li>
+                    </ul>
+                    
+                    <h3>7.4 Taxes</h3>
+                    <p>Users are responsible for reporting and paying any applicable taxes on their earnings or expenses.</p>
+                </div>
+
+                <!-- 8. Cancellations and Refunds -->
+                <div class="terms-section" id="cancellations">
+                    <h2>8. Cancellations and Refunds</h2>
+                    <p>Cancellations and refunds are governed by our <a href="cancellation-policy.html">Cancellation Policy</a>, which is incorporated into these Terms by reference.</p>
+                    
+                    <h3>8.1 Parent Cancellations</h3>
+                    <ul>
+                        <li>Free cancellation: More than 24 hours before session</li>
+                        <li>50% refund: 12-24 hours before session</li>
+                        <li>No refund: Less than 12 hours or no-show</li>
+                    </ul>
+                    
+                    <h3>8.2 Teacher Cancellations</h3>
+                    <p>Teachers who cancel frequently may face account suspension or removal from the Platform.</p>
+                </div>
+
+                <!-- 9. User Conduct -->
+                <div class="terms-section" id="conduct">
+                    <h2>9. User Conduct</h2>
+                    <p>Users agree NOT to:</p>
+                    <ul>
+                        <li>Provide false or misleading information</li>
+                        <li>Impersonate others or create fake accounts</li>
+                        <li>Harass, abuse, or harm others</li>
+                        <li>Engage in discriminatory behavior</li>
+                        <li>Circumvent the Platform's payment system</li>
+                        <li>Solicit users to transact outside the Platform</li>
+                        <li>Upload inappropriate or illegal content</li>
+                        <li>Violate any applicable laws or regulations</li>
+                        <li>Interfere with the Platform's operation</li>
+                        <li>Attempt to gain unauthorized access to systems</li>
+                    </ul>
+                    
+                    <div class="terms-highlight">
+                        <h4><i class="fas fa-ban"></i> Prohibited Conduct</h4>
+                        <p>Violation of these conduct rules may result in account suspension, permanent removal from the Platform, and potential legal action.</p>
+                    </div>
+                </div>
+
+                <!-- 10. Intellectual Property -->
+                <div class="terms-section" id="intellectual-property">
+                    <h2>10. Intellectual Property</h2>
+                    
+                    <h3>10.1 Platform Content</h3>
+                    <p>All content on the Platform (logos, designs, text, graphics, software) is owned by Intellect Haven and protected by intellectual property laws.</p>
+                    
+                    <h3>10.2 User Content</h3>
+                    <p>You retain ownership of content you upload (profiles, photos, reviews). By uploading content, you grant Intellect Haven a non-exclusive, worldwide license to use, display, and distribute your content on the Platform.</p>
+                    
+                    <h3>10.3 Educational Materials</h3>
+                    <p>Teachers retain ownership of their educational materials. Parents may not reproduce or distribute these materials without permission.</p>
+                </div>
+
+                <!-- 11. Privacy and Data Protection -->
+                <div class="terms-section" id="privacy">
+                    <h2>11. Privacy and Data Protection</h2>
+                    <p>Your privacy is important to us. Our <a href="privacy.html">Privacy Policy</a> explains how we collect, use, and protect your personal information.</p>
+                    <p>By using the Platform, you consent to our data practices as described in the Privacy Policy.</p>
+                    <p>We comply with Ghana's Data Protection Act, 2012 (Act 843) and other applicable privacy laws.</p>
+                </div>
+
+                <!-- 12. Limitation of Liability -->
+                <div class="terms-section" id="liability">
+                    <h2>12. Limitation of Liability</h2>
+                    
+                    <h3>12.1 Platform Services</h3>
+                    <p>Intellect Haven provides the Platform "as is" without warranties of any kind. We do not guarantee:</p>
+                    <ul>
+                        <li>The quality or outcomes of tutoring sessions</li>
+                        <li>The availability of specific teachers</li>
+                        <li>Uninterrupted or error-free operation</li>
+                    </ul>
+                    
+                    <h3>12.2 User Interactions</h3>
+                    <p>We are not responsible for the conduct of users on or off the Platform. You interact with other users at your own risk.</p>
+                    
+                    <h3>12.3 Limitation</h3>
+                    <p>To the maximum extent permitted by law, Intellect Haven's liability is limited to the amount you paid to us in the 12 months preceding the claim.</p>
+                </div>
+
+                <!-- 13. Termination -->
+                <div class="terms-section" id="termination">
+                    <h2>13. Termination</h2>
+                    
+                    <h3>13.1 By User</h3>
+                    <p>You may terminate your account at any time by contacting support or using the account deletion feature.</p>
+                    
+                    <h3>13.2 By Intellect Haven</h3>
+                    <p>We may suspend or terminate accounts that:</p>
+                    <ul>
+                        <li>Violate these Terms</li>
+                        <li>Engage in fraudulent or illegal activity</li>
+                        <li>Threaten the safety of users</li>
+                        <li>Remain inactive for extended periods</li>
+                    </ul>
+                    
+                    <h3>13.3 Effect of Termination</h3>
+                    <p>Upon termination, your right to use the Platform ceases. Provisions that should survive termination (liability, intellectual property, etc.) will remain in effect.</p>
+                </div>
+
+                <!-- 14. Changes to Terms -->
+                <div class="terms-section" id="changes">
+                    <h2>14. Changes to Terms</h2>
+                    <p>We may update these Terms from time to time. Changes will be:</p>
+                    <ul>
+                        <li>Posted on the Platform with an updated date</li>
+                        <li>Communicated via email to registered users</li>
+                        <li>Effective 30 days after notification</li>
+                    </ul>
+                    <p>Continued use of the Platform after changes constitutes acceptance of the new Terms.</p>
+                </div>
+
+                <!-- 15. Governing Law -->
+                <div class="terms-section" id="governing-law">
+                    <h2>15. Governing Law</h2>
+                    <p>These Terms are governed by the laws of the Republic of Ghana. Any disputes will be resolved in the courts of Ghana.</p>
+                    
+                    <h3>15.1 Dispute Resolution</h3>
+                    <p>Before initiating legal proceedings, users agree to:</p>
+                    <ul>
+                        <li>Attempt to resolve disputes through direct communication</li>
+                        <li>Participate in mediation if requested</li>
+                        <li>Provide 30 days written notice before filing suit</li>
+                    </ul>
+                </div>
+
+                <!-- 16. Contact Information -->
+                <div class="terms-section" id="contact">
+                    <h2>16. Contact Information</h2>
+                    <p>If you have questions about these Terms, please contact us:</p>
+                    <ul>
+                        <li><strong>Email:</strong> legal@intellecthaven.com</li>
+                        <li><strong>Phone:</strong> +233 (0) 30 277 8899</li>
+                        <li><strong>Address:</strong> 15 Independence Avenue, Ridge, Accra, Ghana</li>
+                    </ul>
+                </div>
+
+                <p class="last-updated">Last updated: January 2024</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart"></i> for African education</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

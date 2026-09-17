@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Frequently Asked Questions - Intellect Haven">
+    <title>FAQ - Intellect Haven</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <style>
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .faq-search {
+            margin-bottom: 2rem;
+        }
+        
+        .faq-search input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+        }
+        
+        .faq-search input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .faq-category {
+            margin-bottom: 3rem;
+        }
+        
+        .faq-category h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .faq-item {
+            background: white;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: background 0.3s;
+        }
+        
+        .faq-question:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .faq-question i {
+            transition: transform 0.3s;
+            color: var(--primary-color);
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 1.5rem;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+            padding: 0 1.5rem 1.5rem;
+        }
+        
+        .faq-answer p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-answer ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-answer a {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <h1>🎓 Intellect Haven</h1>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="find-teacher.html" class="nav-link">Find a Teacher</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="faq.html" class="nav-link active">FAQ</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="login.html" class="btn btn-outline">Login</a>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- FAQ Section -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="faq-container">
+                <div class="dashboard-header">
+                    <div class="welcome-message">
+                        <h2>Frequently Asked Questions</h2>
+                        <p>Find answers to common questions about Intellect Haven</p>
+                    </div>
+                </div>
+
+                <!-- Search -->
+                <div class="faq-search">
+                    <input type="text" id="faqSearch" placeholder="🔍 Search for a question..." oninput="filterFAQ()">
+                </div>
+
+                <!-- General Questions -->
+                <div class="faq-category">
+                    <h3><i class="fas fa-info-circle"></i> General Questions</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>What is Intellect Haven?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Intellect Haven is Africa's trusted teacher-parent learning platform that connects verified teachers with parents for personalized, one-on-one tutoring sessions. We provide a safe, reliable marketplace where parents can find qualified tutors for their children's academic and extracurricular needs.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How does Intellect Haven work?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Our platform works in simple steps:</p>
+                            <ul>
+                                <li><strong>For Parents:</strong> Create an account, add your children's profiles, search for verified teachers, book sessions, and track progress</li>
+                                <li><strong>For Teachers:</strong> Create a profile, get verified, set your availability, receive booking requests, and conduct tutoring sessions</li>
+                                <li>After each session, teachers submit lesson notes and parents can leave reviews</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>Is Intellect Haven free to use?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Creating an account and browsing teachers is completely free. You only pay when you book a tutoring session. Teachers set their own hourly rates, and Intellect Haven charges a small service fee to maintain the platform and ensure quality.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- For Parents -->
+                <div class="faq-category">
+                    <h3><i class="fas fa-user-friends"></i> For Parents</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I find the right teacher for my child?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Use our advanced search filters to find teachers by:</p>
+                            <ul>
+                                <li>Subject (Mathematics, English, Science, etc.)</li>
+                                <li>Curriculum (GES, British, Cambridge, IB, Montessori)</li>
+                                <li>School level (Nursery, Primary, JHS, SHS)</li>
+                                <li>Location (city and area)</li>
+                                <li>Hourly rate range</li>
+                                <li>Teacher rating and reviews</li>
+                            </ul>
+                            <p>You can also read teacher profiles, view their qualifications, and check reviews from other parents.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>Are all teachers verified?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! All teachers on Intellect Haven go through a rigorous verification process that includes:</p>
+                            <ul>
+                                <li>Government ID verification</li>
+                                <li>Qualification certificate verification</li>
+                                <li>Reference checks (optional but recommended)</li>
+                                <li>Background screening</li>
+                            </ul>
+                            <p>Only verified teachers can receive bookings. Look for the "Verified" badge on teacher profiles.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I book a session?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Booking a session is easy:</p>
+                            <ul>
+                                <li>Find a teacher you like and click "View Profile"</li>
+                                <li>Click "Book Session" on their profile</li>
+                                <li>Select your child, subject, date, time, and duration</li>
+                                <li>Add any notes about what you'd like covered</li>
+                                <li>Review the total cost and confirm the booking</li>
+                            </ul>
+                            <p>The teacher will receive your request and confirm it. You'll be notified once confirmed.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>Can I cancel a booking?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, you can cancel bookings based on our cancellation policy:</p>
+                            <ul>
+                                <li><strong>Free cancellation:</strong> More than 24 hours before the session</li>
+                                <li><strong>50% refund:</strong> 12-24 hours before the session</li>
+                                <li><strong>No refund:</strong> Less than 12 hours before the session or no-show</li>
+                            </ul>
+                            <p>To cancel, go to "My Bookings" and click "Cancel" on the booking you want to cancel.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I track my child's progress?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>After each completed session, teachers submit detailed session notes including:</p>
+                            <ul>
+                                <li>Lesson topic covered</li>
+                                <li>What was taught</li>
+                                <li>Homework assigned</li>
+                                <li>Student progress and performance</li>
+                            </ul>
+                            <p>You can view these notes in your "Session History" page. You can also leave reviews for teachers after completed sessions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- For Teachers -->
+                <div class="faq-category">
+                    <h3><i class="fas fa-chalkboard-teacher"></i> For Teachers</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I become a teacher on Intellect Haven?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>To become a teacher on Intellect Haven:</p>
+                            <ul>
+                                <li>Click "Sign Up" and select "Teacher" as your user type</li>
+                                <li>Complete your profile with your qualifications, experience, and subjects</li>
+                                <li>Upload verification documents (ID and qualification certificates)</li>
+                                <li>Set your hourly rate and availability</li>
+                                <li>Wait for admin verification (usually within 48 hours)</li>
+                                <li>Once verified, you can start receiving booking requests</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How much can I earn?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Your earnings depend on:</p>
+                            <ul>
+                                <li>Your hourly rate (you set this)</li>
+                                <li>Number of sessions you conduct</li>
+                                <li>Session duration</li>
+                            </ul>
+                            <p>Intellect Haven charges a 15% service fee on each booking. For example, if you charge GHS 50/hour for a 2-hour session (GHS 100 total), you'll receive GHS 85 after the service fee.</p>
+                            <p>Top teachers on our platform earn between GHS 2,000 - GHS 8,000 per month depending on their availability and reputation.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I get paid?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Payments are processed through Mobile Money (MoMo):</p>
+                            <ul>
+                                <li>Parents pay when they book a session</li>
+                                <li>Funds are held securely until the session is completed</li>
+                                <li>After you mark the session as complete and submit session notes, payment is released to your MoMo account within 24 hours</li>
+                                <li>You can track all your earnings in your "Earnings" dashboard</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>What happens if a parent cancels?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If a parent cancels a booking:</p>
+                            <ul>
+                                <li><strong>More than 24 hours before:</strong> Full refund to parent, no payment to you</li>
+                                <li><strong>12-24 hours before:</strong> 50% refund to parent, you receive 50% of the booking fee</li>
+                                <li><strong>Less than 12 hours or no-show:</strong> No refund to parent, you receive full payment</li>
+                            </ul>
+                            <p>You'll be notified immediately when a cancellation occurs.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do I set my availability?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>To set your availability:</p>
+                            <ul>
+                                <li>Go to your dashboard and click "Availability"</li>
+                                <li>Toggle on the days you're available</li>
+                                <li>Select your available time slots for each day (8 AM - 8 PM)</li>
+                                <li>Save your availability</li>
+                            </ul>
+                            <p>Parents can only book sessions during your available times. You can update your availability anytime.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payments & Billing -->
+                <div class="faq-category">
+                    <h3><i class="fas fa-money-bill-wave"></i> Payments & Billing</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>What payment methods are accepted?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>We currently accept:</p>
+                            <ul>
+                                <li>Mobile Money (MTN, Vodafone, AirtelTigo)</li>
+                                <li>Credit/Debit Cards (Visa, Mastercard) - coming soon</li>
+                                <li>Bank Transfer - coming soon</li>
+                            </ul>
+                            <p>All payments are processed securely through Paystack.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>Is my payment information secure?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! We take security seriously:</p>
+                            <ul>
+                                <li>All payments are processed through Paystack, a PCI-DSS compliant payment processor</li>
+                                <li>We never store your card details on our servers</li>
+                                <li>All data is encrypted using industry-standard SSL encryption</li>
+                                <li>We comply with Ghana's Data Protection Act</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>What is the service fee?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Intellect Haven charges a 15% service fee on each booking. This fee covers:</p>
+                            <ul>
+                                <li>Platform maintenance and development</li>
+                                <li>Teacher verification and quality assurance</li>
+                                <li>Customer support</li>
+                                <li>Payment processing</li>
+                                <li>Dispute resolution</li>
+                            </ul>
+                            <p>The service fee is automatically deducted from the teacher's earnings.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Safety & Trust -->
+                <div class="faq-category">
+                    <h3><i class="fas fa-shield-alt"></i> Safety & Trust</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do you ensure child safety?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Child safety is our top priority. We ensure safety through:</p>
+                            <ul>
+                                <li><strong>Rigorous teacher verification:</strong> ID checks, qualification verification, and reference checks</li>
+                                <li><strong>Background screening:</strong> All teachers undergo background checks</li>
+                                <li><strong>Review system:</strong> Parents can leave reviews after each session</li>
+                                <li><strong>Session notes:</strong> Teachers must submit detailed notes after each session</li>
+                                <li><strong>Reporting system:</strong> Easy reporting of any concerns</li>
+                                <li><strong>Admin monitoring:</strong> Our team monitors platform activity</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>What if I have a problem with a teacher or parent?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If you experience any issues:</p>
+                            <ul>
+                                <li>Try to resolve the issue directly through respectful communication</li>
+                                <li>If that doesn't work, contact our support team at support@intellecthaven.com</li>
+                                <li>Provide details of the issue, including booking ID and any relevant information</li>
+                                <li>Our team will investigate and mediate the situation</li>
+                                <li>We may issue refunds, suspend accounts, or take other appropriate action</li>
+                            </ul>
+                            <p>We take all complaints seriously and aim to resolve issues within 48 hours.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>How do you protect my personal data?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>We protect your data through:</p>
+                            <ul>
+                                <li>Compliance with Ghana's Data Protection Act, 2012 (Act 843)</li>
+                                <li>Industry-standard encryption for all data</li>
+                                <li>Secure cloud storage with regular backups</li>
+                                <li>Limited access to personal information (only what's necessary)</li>
+                                <li>Clear privacy policy explaining how we use your data</li>
+                                <li>Option to delete your account and data at any time</li>
+                            </ul>
+                            <p>Read our full <a href="privacy.html">Privacy Policy</a> for more details.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Support -->
+                <div class="faq-category">
+                    <h3><i class="fas fa-tools"></i> Technical Support</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>I forgot my password. What should I do?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>To reset your password:</p>
+                            <ul>
+                                <li>Click "Login" in the top navigation</li>
+                                <li>Click "Forgot password?" link</li>
+                                <li>Enter your email address</li>
+                                <li>Check your email for a password reset link</li>
+                                <li>Click the link and create a new password</li>
+                            </ul>
+                            <p>The reset link expires in 1 hour for security. If you don't receive the email, check your spam folder or <a href="contact.html">contact support</a>.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>The website isn't working properly. What should I do?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Try these troubleshooting steps:</p>
+                            <ul>
+                                <li>Refresh the page (Ctrl+F5 or Cmd+Shift+R)</li>
+                                <li>Clear your browser cache and cookies</li>
+                                <li>Try a different browser (Chrome, Firefox, Safari)</li>
+                                <li>Check your internet connection</li>
+                                <li>Disable browser extensions temporarily</li>
+                                <li>Make sure you're using an updated browser</li>
+                            </ul>
+                            <p>If the problem persists, <a href="contact.html">contact our support team</a> with details of the issue.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <span>Can I use Intellect Haven on my mobile phone?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! Intellect Haven is fully responsive and works on all devices:</p>
+                            <ul>
+                                <li>Desktop computers</li>
+                                <li>Laptops</li>
+                                <li>Tablets</li>
+                                <li>Smartphones (iOS and Android)</li>
+                            </ul>
+                            <p>Our mobile apps are coming soon! For now, you can use the website through your mobile browser. We recommend adding it to your home screen for quick access.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Still Need Help -->
+                <div class="dashboard-section" style="text-align: center; margin-top: 3rem;">
+                    <h3>Still Have Questions?</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Can't find what you're looking for? Our support team is here to help!</p>
+                    <a href="contact.html" class="btn btn-primary btn-large">
+                        <i class="fas fa-envelope"></i> Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Intellect Haven. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart"></i> for African education</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script>
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            faqItem.classList.toggle('active');
+        }
+        
+        function filterFAQ() {
+            const searchTerm = document.getElementById('faqSearch').value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Open first FAQ item by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstFAQ = document.querySelector('.faq-item');
+            if (firstFAQ) {
+                firstFAQ.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
