@@ -626,9 +626,20 @@
         
         async function loadTeachers() {
             try {
+                // Check if Firebase is configured
+                if (!firebaseDB || !firebaseDB.app) {
+                    showDemoData();
+                    return;
+                }
+                
                 const snapshot = await firebaseDB.collection('teachers')
                     .where('verificationStatus', '==', 'verified')
                     .get();
+                
+                if (snapshot.empty) {
+                    showDemoData();
+                    return;
+                }
                 
                 allTeachers = [];
                 
@@ -646,13 +657,112 @@
                 
             } catch (error) {
                 console.error('Error loading teachers:', error);
-                document.getElementById('teachersGrid').innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1;">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <p>Error loading teachers</p>
-                    </div>
-                `;
+                showDemoData();
             }
+        }
+        
+        function showDemoData() {
+            // Show demo data when Firebase is not configured
+            allTeachers = [
+                {
+                    id: 'demo1',
+                    user: { firstName: 'Sarah', lastName: 'Mensah' },
+                    bio: 'Experienced mathematics teacher with 8 years of teaching GES and British curriculum. Passionate about making math fun and accessible for all students.',
+                    qualification: 'B.Ed Mathematics, University of Ghana',
+                    experienceYears: 8,
+                    hourlyRate: 80,
+                    rating: 4.8,
+                    totalReviews: 45,
+                    subjects: ['Mathematics', 'Physics', 'Science'],
+                    curricula: ['GES', 'British'],
+                    schoolLevels: ['Primary', 'JHS', 'SHS'],
+                    location: { city: 'Accra', area: 'East Legon' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified'
+                },
+                {
+                    id: 'demo2',
+                    user: { firstName: 'Kwame', lastName: 'Asante' },
+                    bio: 'English language specialist with expertise in Cambridge curriculum. Helping students excel in literature, grammar, and creative writing.',
+                    qualification: 'M.A English Literature, University of Cape Coast',
+                    experienceYears: 12,
+                    hourlyRate: 100,
+                    rating: 4.9,
+                    totalReviews: 67,
+                    subjects: ['English Language', 'Literature'],
+                    curricula: ['Cambridge', 'British', 'GES'],
+                    schoolLevels: ['JHS', 'SHS'],
+                    location: { city: 'Accra', area: 'Cantonments' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified'
+                },
+                {
+                    id: 'demo3',
+                    user: { firstName: 'Ama', lastName: 'Osei' },
+                    bio: 'Science teacher specializing in Chemistry and Biology. Making complex concepts simple and engaging for students.',
+                    qualification: 'B.Sc Biochemistry, KNUST',
+                    experienceYears: 6,
+                    hourlyRate: 75,
+                    rating: 4.7,
+                    totalReviews: 38,
+                    subjects: ['Chemistry', 'Biology', 'Science'],
+                    curricula: ['GES', 'Cambridge'],
+                    schoolLevels: ['SHS', 'JHS'],
+                    location: { city: 'Kumasi', area: 'Adum' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified'
+                },
+                {
+                    id: 'demo4',
+                    user: { firstName: 'Kofi', lastName: 'Appiah' },
+                    bio: 'ICT and Computing teacher with industry experience. Teaching coding, web development, and computer science fundamentals.',
+                    qualification: 'B.Sc Computer Science, Ashesi University',
+                    experienceYears: 5,
+                    hourlyRate: 90,
+                    rating: 4.6,
+                    totalReviews: 29,
+                    subjects: ['ICT', 'Computer Science', 'Programming'],
+                    curricula: ['GES', 'Cambridge', 'IB'],
+                    schoolLevels: ['JHS', 'SHS'],
+                    location: { city: 'Accra', area: 'Airport Residential' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified'
+                },
+                {
+                    id: 'demo5',
+                    user: { firstName: 'Abena', lastName: 'Boateng' },
+                    bio: 'Primary school teacher with expertise in early childhood education and foundational literacy. Creating nurturing learning environments.',
+                    qualification: 'Diploma in Basic Education, Wesley College',
+                    experienceYears: 10,
+                    hourlyRate: 60,
+                    rating: 4.9,
+                    totalReviews: 52,
+                    subjects: ['English Language', 'Mathematics', 'Science'],
+                    curricula: ['GES', 'Montessori'],
+                    schoolLevels: ['Nursery', 'Primary'],
+                    location: { city: 'Tema', area: 'Community 25' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified'
+                },
+                {
+                    id: 'demo6',
+                    user: { firstName: 'Yaw', lastName: 'Darkwa' },
+                    bio: 'Physics specialist with engineering background. Making physics practical and relatable through real-world applications.',
+                    qualification: 'B.Eng Mechanical Engineering, KNUST',
+                    experienceYears: 7,
+                    hourlyRate: 85,
+                    rating: 4.5,
+                    totalReviews: 33,
+                    subjects: ['Physics', 'Mathematics', 'Science'],
+                    curricula: ['GES', 'British', 'Cambridge'],
+                    schoolLevels: ['SHS', 'JHS'],
+                    location: { city: 'Accra', area: 'Spintex' },
+                    profilePhoto: null,
+                    verificationStatus: 'verified'
+                }
+            ];
+            
+            applyFilters();
         }
         
         function applyFilters() {
