@@ -518,3 +518,41 @@ window.IntellectHaven = {
     uploadFile,
     deleteFile
 };
+
+// Update navigation with user profile picture
+function updateUserNav() {
+    if (window.currentUser && window.userData) {
+        const navUser = document.getElementById('navUser');
+        const navAuth = document.getElementById('navAuth');
+        
+        if (navUser && navAuth) {
+            navUser.style.display = 'flex';
+            navAuth.style.display = 'none';
+            
+            const userName = document.getElementById('userName');
+            if (userName) {
+                userName.textContent = window.userData.firstName;
+            }
+            
+            // Add profile picture to nav if exists
+            if (window.userData.profilePhoto) {
+                const navUserContainer = navUser.querySelector('.nav-user');
+                if (navUserContainer && !navUserContainer.querySelector('.nav-profile-picture')) {
+                    const profilePic = document.createElement('img');
+                    profilePic.src = window.userData.profilePhoto;
+                    profilePic.alt = 'Profile';
+                    profilePic.className = 'nav-profile-picture';
+                    profilePic.style.cssText = 'width: 35px; height: 35px; border-radius: 50%; object-fit: cover; margin-right: 0.5rem;';
+                    navUserContainer.insertBefore(profilePic, navUserContainer.firstChild);
+                }
+            }
+        }
+    }
+}
+
+// Call updateUserNav when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.currentUser) {
+        updateUserNav();
+    }
+});

@@ -81,6 +81,24 @@
                             <i class="fas fa-arrow-left"></i> Back
                         </button>
 
+                        <!-- Profile Picture Upload -->
+                        <div class="form-group" style="text-align: center; margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 1rem; font-weight: 600;">Profile Picture (Optional)</label>
+                            <div class="profile-picture-upload">
+                                <div class="profile-picture-preview" id="profilePicturePreview">
+                                    <i class="fas fa-user" style="font-size: 3rem; color: var(--text-light);"></i>
+                                </div>
+                                <label for="profilePicture" class="profile-picture-label">
+                                    <i class="fas fa-camera"></i> Choose Photo
+                                    <input type="file" id="profilePicture" accept="image/*" style="display: none;" onchange="previewProfilePicture(event)">
+                                </label>
+                                <button type="button" class="btn btn-outline btn-small" id="removePictureBtn" style="display: none; margin-top: 0.5rem;" onclick="removeProfilePicture()">
+                                    <i class="fas fa-times"></i> Remove
+                                </button>
+                                <small style="display: block; margin-top: 0.5rem; color: var(--text-light);">JPG, PNG or GIF (Max 5MB)</small>
+                            </div>
+                        </div>
+
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="firstName">

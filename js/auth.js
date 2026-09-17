@@ -293,6 +293,27 @@ async function handleRegister(e) {
     const resetLoading = showLoading(registerBtn);
     
     try {
+        // Upload profile picture if provided
+        let profilePhotoURL = null;
+        if (profilePictureFile) {
+            try {
+                const uploadResult = await ImageUpload.uploadTeacherProfilePhoto(
+                    profilePictureFile,
+                    user.uid,
+                    (progress) => {
+                        console.log('Upload progress:', progress);
+                    }
+                );
+                
+                if (uploadResult.success) {
+                    profilePhotoURL = uploadResult.url;
+                }
+            } catch (uploadError) {
+                console.error('Profile picture upload error:', uploadError);
+                // Continue with registration even if photo upload fails
+            }
+        }
+        
         // Create user with Firebase Auth
         const userCredential = await firebaseAuth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
@@ -305,6 +326,7 @@ async function handleRegister(e) {
             firstName: firstName,
             lastName: lastName,
             phone: phone,
+            profilePhoto: profilePhotoURL,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             isActive: true
         };
@@ -326,6 +348,7 @@ async function handleRegister(e) {
                     city: city,
                     area: ''
                 },
+                profilePhoto: profilePhotoURL,
                 verificationStatus: 'pending',
                 verificationDocuments: {},
                 rating: 0,
@@ -338,6 +361,7 @@ async function handleRegister(e) {
         } else if (userType === 'parent') {
             await firebaseDB.collection('parents').doc(user.uid).set({
                 userId: user.uid,
+                profilePhoto: profilePhotoURL,
                 location: {
                     city: city,
                     area: ''
@@ -509,4 +533,38 @@ if (confirmPasswordInput) {
             document.getElementById('confirmPasswordError').classList.remove('show');
         }
     });
+}
+
+// Profile Picture Upload Functions
+let profilePictureFile = null;
+
+function previewProfilePicture(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Validate file
+    const validation = ImageUpload.validateImageFile(file);
+    if (!validation.valid) {
+        showFlashMessage(validation.error, 'error');
+        event.target.value = '';
+        return;
+    }
+    
+    profilePictureFile = file;
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const preview = document.getElementById('profilePicturePreview');
+        preview.innerHTML = `<img src="${e.target.result}" alt="Profile Picture">`;
+        document.getElementById('removePictureBtn').style.display = 'inline-block';
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeProfilePicture() {
+    profilePictureFile = null;
+    document.getElementById('profilePicture').value = '';
+    document.getElementById('profilePicturePreview').innerHTML = '<i class="fas fa-user" style="font-size: 3rem; color: var(--text-light);"></i>';
+    document.getElementById('removePictureBtn').style.display = 'none';
 }
