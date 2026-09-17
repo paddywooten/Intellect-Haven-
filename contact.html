@@ -17,6 +17,172 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    
+    <style>
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-form-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .contact-form-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .contact-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .contact-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .contact-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .contact-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .contact-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .contact-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .social-links-contact {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links-contact a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+            transition: all 0.3s;
+            font-size: 1.25rem;
+        }
+        
+        .social-links-contact a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .quick-help-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--radius-md);
+        }
+        
+        .quick-help-card h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .quick-help-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .quick-help-card li {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quick-help-card a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -51,11 +217,11 @@
                 </div>
             </div>
 
-            <div class="admin-grid">
+            <div class="contact-grid">
                 <!-- Contact Form -->
-                <div class="dashboard-section">
+                <div class="contact-form-section">
                     <h3><i class="fas fa-envelope"></i> Send us a Message</h3>
-                    <form id="contactForm" class="dashboard-form">
+                    <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Your Name <span style="color: var(--error-color);">*</span></label>
                             <input type="text" id="name" required placeholder="John Doe">
@@ -91,87 +257,70 @@
                             <textarea id="message" rows="6" required placeholder="How can we help you?"></textarea>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                        <button type="submit" class="btn btn-primary btn-large" id="submitBtn" style="width: 100%;">
                             <i class="fas fa-paper-plane"></i> Send Message
                         </button>
                     </form>
                 </div>
 
                 <!-- Contact Information -->
-                <div>
-                    <div class="dashboard-section">
+                <div class="contact-info-section">
+                    <div class="contact-card">
                         <h3><i class="fas fa-info-circle"></i> Contact Information</h3>
-                        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                            <div>
-                                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">
-                                    <i class="fas fa-envelope"></i> Email
-                                </h4>
-                                <p style="color: var(--text-secondary);">support@intellecthaven.com</p>
-                                <p style="color: var(--text-secondary);">info@intellecthaven.com</p>
-                            </div>
-                            
-                            <div>
-                                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">
-                                    <i class="fas fa-phone"></i> Phone
-                                </h4>
-                                <p style="color: var(--text-secondary);">+233 (0) 30 277 8899</p>
-                                <p style="color: var(--text-secondary);">Mon-Fri: 8:00 AM - 6:00 PM</p>
-                            </div>
-                            
-                            <div>
-                                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">
-                                    <i class="fas fa-map-marker-alt"></i> Address
-                                </h4>
-                                <p style="color: var(--text-secondary);">
-                                    Intellect Haven<br>
-                                    15 Independence Avenue<br>
-                                    Ridge, Accra<br>
-                                    Ghana
-                                </p>
-                            </div>
-                            
-                            <div>
-                                <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">
-                                    <i class="fas fa-clock"></i> Business Hours
-                                </h4>
-                                <p style="color: var(--text-secondary);">Monday - Friday: 8:00 AM - 6:00 PM</p>
-                                <p style="color: var(--text-secondary);">Saturday: 9:00 AM - 2:00 PM</p>
-                                <p style="color: var(--text-secondary);">Sunday: Closed</p>
-                            </div>
+                        
+                        <div class="contact-item">
+                            <h4><i class="fas fa-envelope"></i> Email</h4>
+                            <p>support@intellecthaven.com</p>
+                            <p>info@intellecthaven.com</p>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <h4><i class="fas fa-phone"></i> Phone</h4>
+                            <p>+233 (0) 30 277 8899</p>
+                            <p>Mon-Fri: 8:00 AM - 6:00 PM</p>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <h4><i class="fas fa-map-marker-alt"></i> Address</h4>
+                            <p>
+                                Intellect Haven<br>
+                                15 Independence Avenue<br>
+                                Ridge, Accra<br>
+                                Ghana
+                            </p>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <h4><i class="fas fa-clock"></i> Business Hours</h4>
+                            <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+                            <p>Saturday: 9:00 AM - 2:00 PM</p>
+                            <p>Sunday: Closed</p>
                         </div>
                     </div>
 
-                    <div class="dashboard-section">
+                    <div class="contact-card">
                         <h3><i class="fas fa-share-alt"></i> Follow Us</h3>
-                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <a href="#" class="btn btn-outline" style="padding: 0.75rem 1rem;">
-                                <i class="fab fa-facebook"></i>
-                            </a>
-                            <a href="#" class="btn btn-outline" style="padding: 0.75rem 1rem;">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" class="btn btn-outline" style="padding: 0.75rem 1rem;">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="#" class="btn btn-outline" style="padding: 0.75rem 1rem;">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
+                        <div class="social-links-contact">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                         </div>
                     </div>
 
-                    <div class="dashboard-section" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%); color: white;">
-                        <h3 style="color: white;"><i class="fas fa-question-circle"></i> Quick Help</h3>
-                        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
-                            <li style="margin-bottom: 0.75rem;">
-                                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
-                                <a href="faq.html" style="color: white; text-decoration: underline;">Check our FAQ</a>
-                            </li>
-                            <li style="margin-bottom: 0.75rem;">
-                                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
-                                <a href="about.html" style="color: white; text-decoration: underline;">Learn about us</a>
+                    <div class="quick-help-card">
+                        <h3><i class="fas fa-question-circle"></i> Quick Help</h3>
+                        <ul>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <a href="faq.html">Check our FAQ</a>
                             </li>
                             <li>
-                                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                                <i class="fas fa-check-circle"></i>
+                                <a href="about.html">Learn about us</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
                                 Response within 24 hours
                             </li>
                         </ul>
