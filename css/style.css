@@ -1075,6 +1075,7 @@ img {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
+    color: var(--accent-color);
 }
 
 .chat-status {
@@ -1291,8 +1292,14 @@ img {
     
     .chat-window {
         width: calc(100vw - 40px);
-        height: calc(100vh - 120px);
+        height: calc(100vh - 140px);
         bottom: 70px;
+        top: auto;
+        max-height: calc(100vh - 140px);
+    }
+    
+    .chat-header {
+        padding-top: calc(1rem + env(safe-area-inset-top, 0px));
     }
     
     .chat-button {
